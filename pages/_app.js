@@ -2,7 +2,7 @@ import NavBar from "../components/NavBar";
 import GlobalStyle from "../helpers/globalStyles";
 import Container from "../components/Styled/Container";
 
-function MyApp({ Component, pageProps }) {
+function FastQuiz({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
@@ -14,4 +14,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default FastQuiz;
