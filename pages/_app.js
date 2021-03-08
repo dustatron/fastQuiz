@@ -1,10 +1,15 @@
 import NavBar from "../components/NavBar";
+import GlobalStyle from "../helpers/globalStyles";
+import Container from "../components/Styled/Container";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
+      <GlobalStyle />
       <NavBar />
-      <Component {...pageProps} />
+      <Container>
+        <Component {...pageProps} />
+      </Container>
     </>
   );
 }

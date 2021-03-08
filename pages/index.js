@@ -8,7 +8,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>Fast Quiz</main>
+      <h1>FastQuiz</h1>
 
       <footer></footer>
     </div>
