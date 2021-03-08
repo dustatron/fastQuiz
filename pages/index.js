@@ -1,16 +1,17 @@
 import Head from "next/head";
+import InitialMakeQuiz from "../components/InitialMakeQuiz";
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Head>
         <title>FastQuiz</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>FastQuiz</h1>
+      <InitialMakeQuiz />
 
       <footer></footer>
-    </div>
+    </>
   );
 }
