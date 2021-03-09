@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import colors from "../../helpers/colors";
 const Button = styled.button`
+  margin: 0 ${(props) => (props.margin ? props.margin : "")};
   padding: 0.7em 2em;
   font-weight: 500;
   font-size: 13px;
