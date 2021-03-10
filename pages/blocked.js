@@ -1,13 +1,24 @@
 import React from "react";
-import { Card, TitleLarge, Section, Detail } from "../components/Styled";
+import {
+  Button,
+  TitleLarge,
+  Section,
+  Detail,
+  RowCenter,
+} from "../components/Styled";
 
 export default function Blocked() {
   return (
-    <Section>
-      <Card>
-        <Detail lite>You must be logged in to view this content</Detail>
-        <TitleLarge padTop={"2rem"}>Blocked</TitleLarge>
-      </Card>
+    <Section height={"80vh"}>
+      <Detail lite padBottom={"1em"}>
+        You must be logged in to view this content
+      </Detail>
+      <TitleLarge padBottom={"1rem"} dark>
+        Please Login
+      </TitleLarge>
+      <RowCenter>
+        <Button>Login</Button>
+      </RowCenter>
     </Section>
   );
 }

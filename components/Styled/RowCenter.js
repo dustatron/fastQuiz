@@ -5,6 +5,8 @@ const RowCenter = styled.div`
   width: 100%;
   justify-content: center;
   align-items: flex-end;
+  padding-top: ${(props) => (props.padTop ? props.padTop : "unset")};
+  padding-bottom: ${(props) => (props.padBottom ? props.padBottom : "unset")};
 `;
 
 function getSpacing(props) {

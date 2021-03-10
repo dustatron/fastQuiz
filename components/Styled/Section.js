@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 const Section = styled.div`
-  padding: 4rem;
+  position: relative;
+  padding: ${(props) => (props.pad ? props.pad : "4rem")};
   width: 70%;
-  min-height: 50vh;
+  min-height: ${(props) => (props.height ? props.height : "50vh")};
 `;
 
 export default Section;

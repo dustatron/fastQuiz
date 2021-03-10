@@ -12,6 +12,9 @@ import RowCenter from "./RowCenter";
 import RowSpacedOut from "./RowSpacedOut";
 import RowSide from "./RowSide";
 import Detail from "./Detail";
+import Header from "./Header";
+import FormGroup from "./FormGroup";
+import Tab from "./Tab";
 
 export {
   Button,
@@ -28,4 +31,7 @@ export {
   RowSpacedOut,
   RowSide,
   Detail,
+  Header,
+  FormGroup,
+  Tab,
 };
