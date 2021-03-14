@@ -1,4 +1,5 @@
 import Button from "./Button";
+import ButtonAdd from "./ButtonAdd";
 import ButtonShy from "./ButtonShy";
 import Card from "./Card";
 import CenterItem from "./CenterItem";
@@ -15,10 +16,16 @@ import Detail from "./Detail";
 import Header from "./Header";
 import FormGroup from "./FormGroup";
 import Tab from "./Tab";
+import SpacerBar from "./SpacerBar";
+import HeaderContainer from "./HeaderContainer";
+import Top from "./Top";
+import Left from "./Left";
+import Right from "./Right";
 
 export {
   Button,
   ButtonShy,
+  ButtonAdd,
   Card,
   CenterItem,
   Container,
@@ -34,4 +41,9 @@ export {
   Header,
   FormGroup,
   Tab,
+  SpacerBar,
+  Top,
+  Left,
+  Right,
+  HeaderContainer,
 };
