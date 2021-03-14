@@ -6,7 +6,7 @@ import Logo from "./Logo";
 import Menu from "./Menu";
 import Item from "./Item";
 
-const NavBar = () => {
+const NavBar = ({ user, signOut, signIn }) => {
   const [selected, setSelected] = useState(0);
 
   return (
@@ -33,7 +33,11 @@ const NavBar = () => {
           </Item>
           <Item active={selected === 3}>
             <Link href="/blocked">
-              <a onClick={() => setSelected(3)}>Logout</a>
+              {user ? (
+                <a onClick={signOut}>Sign Out</a>
+              ) : (
+                <a onClick={signIn}>Sign In</a>
+              )}
             </Link>
           </Item>
         </Menu>

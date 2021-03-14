@@ -1,4 +1,10 @@
 import colors from "./colors";
+import {
+  useAuthState,
+  useFirestoreQuery,
+  useLocalStorage,
+  useMedia,
+} from "./firbaseHooks";
 
 const clean = (string) => {
   return string
@@ -9,4 +15,11 @@ const clean = (string) => {
     .replace(/&ouml;/g, "ö");
 };
 
-export { colors, clean };
+export {
+  colors,
+  clean,
+  useAuthState,
+  useFirestoreQuery,
+  useLocalStorage,
+  useMedia,
+};
