@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import colors from "../../helpers/colors";
 const Button = styled.button`
-  margin: 0 ${(props) => (props.margin ? props.margin : "")};
-  padding: 0.7em 2em;
+  margin: ${(props) => (props.margin ? props.margin : "")};
+  padding: ${(props) => (props.pad ? props.pad : "0.7em 2em")};
   font-weight: 500;
   font-size: 13px;
   color: ${(props) => (props.white ? colors.black : colors.white)};
@@ -16,6 +16,12 @@ const Button = styled.button`
     transform: translateY(3px);
     transition: all 0.1s ease;
   }
+
+  ${(props) =>
+    props.width &&
+    css`
+      width: ${props.width};
+    `}
 `;
 
 export default Button;

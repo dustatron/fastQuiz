@@ -1,7 +1,6 @@
 import React from "react";
 import { SpacerBar } from "../components/Styled";
 import QuestionHeader from "../components/QuestionHeader";
-
 import QuestionSingle from "../components/QuestionSingle";
 
 const fakeData = {

@@ -1,15 +1,6 @@
 import React from "react";
-import {
-  Section,
-  Card,
-  Title,
-  Button,
-  ButtonShy,
-  RowCenter,
-  RowSpacedOut,
-  RowSide,
-  Detail,
-} from "../components/Styled";
+import GameCard from "../components/GameCard";
+import { Section } from "../components/Styled";
 
 const fakeData = [
   {
@@ -37,29 +28,7 @@ const games = () => {
     <Section>
       <h1>Games</h1>
       {fakeData.map((game) => (
-        <Card lite>
-          <RowSpacedOut top>
-            <Title justify="left" left>
-              {game.title}
-            </Title>
-            <ButtonShy>🗑</ButtonShy>
-          </RowSpacedOut>
-          <RowSpacedOut bottom>
-            <RowSide>
-              <Detail marginR={"5px"} borderR>
-                Questions: {game.questions}
-              </Detail>
-              <Detail marginR={"5px"} borderR>
-                Rounds: {game.rounds}
-              </Detail>
-              <Detail>Created: {game.created}</Detail>
-            </RowSide>
-            <RowSide end>
-              <Button margin={"5px"}>Edit</Button>
-              <Button margin={"5px"}>Play</Button>
-            </RowSide>
-          </RowSpacedOut>
-        </Card>
+        <GameCard game={game} />
       ))}
     </Section>
   );

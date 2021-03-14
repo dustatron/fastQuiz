@@ -10,6 +10,7 @@ import {
   Left,
   Right,
   Tab,
+  RowSpacedOut,
 } from "../Styled";
 
 import { clean } from "../../helpers";
@@ -41,10 +42,10 @@ const QuestionSingle = ({
               {display.map((q, index) => (
                 <Button
                   white
-                  margin={"5px"}
+                  margin={"10px"}
+                  width={"80%"}
+                  pad={"1.3em 2em"}
                   key={`${q[0]}-${index}`}
-                  className="question-options-btn"
-                  size="lg"
                   onClick={(e) => {
                     console.log(q);
                   }}
