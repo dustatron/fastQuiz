@@ -5,6 +5,7 @@ import {
   useLocalStorage,
   useMedia,
 } from "./firbaseHooks";
+import { fetchQuizApi } from "./fetchApi";
 
 const clean = (string) => {
   return string
@@ -22,4 +23,5 @@ export {
   useFirestoreQuery,
   useLocalStorage,
   useMedia,
+  fetchQuizApi,
 };

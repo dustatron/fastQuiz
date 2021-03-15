@@ -23,9 +23,10 @@ const QuestionHeader = ({
   selectedRound,
   setSelectedRound,
   handleAddQuestion,
+  handleGenerate,
 }) => {
   const { quizName, rounds } = quizData;
-  const [showing, setShowing] = useState(1);
+  const [showing, setShowing] = useState(0);
 
   const addRound = () => {
     let newRounds = [];
@@ -90,8 +91,14 @@ const QuestionHeader = ({
           <Card>
             <RowSpacedOut top>
               <div>
-                <Header>Round {rounds[selectedRound].round}</Header>
-                Round {rounds[selectedRound].round} Name
+                <Header>
+                  Round{" "}
+                  {quizData.rounds[selectedRound] &&
+                    rounds[selectedRound].round}
+                </Header>
+                Round{" "}
+                {quizData.rounds[selectedRound] && rounds[selectedRound].round}{" "}
+                Name
               </div>
               <div>
                 <ButtonShy
@@ -115,7 +122,9 @@ const QuestionHeader = ({
                 </ButtonShy>
               </div>
             </RowSpacedOut>
-            {showing === 0 && <QuestionsGenerate />}
+            {showing === 0 && (
+              <QuestionsGenerate handleGenerate={handleGenerate} />
+            )}
             {showing === 1 && (
               <QuestionsCustom handleAddQuestion={handleAddQuestion} />
             )}

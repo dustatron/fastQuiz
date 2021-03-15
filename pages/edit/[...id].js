@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import firebase from "firebase";
-
+import { fetchQuizApi } from "../../helpers";
 // Components
 import { SpacerBar } from "../../components/Styled";
 import QuestionHeader from "../../components/QuestionHeader";
@@ -25,6 +25,7 @@ const fakeQuestion = {
 const Edit = () => {
   const [quizData, setQuizData] = useState(null);
   const [selectedRound, setSelectedRound] = useState(0);
+  const [isShowingSpinner, setIsShowingSpinner] = useState(false);
 
   const router = useRouter();
   const quizId = router.query.id;
@@ -78,6 +79,26 @@ const Edit = () => {
     });
   };
 
+  const handleGenerate = async (params) => {
+    const data = await fetchQuizApi(setIsShowingSpinner, params);
+
+    const addQuestionToCurrentRoundsArray = [
+      ...quizData.rounds[selectedRound].questions,
+      ...data.results,
+    ];
+    const updatedRoundObject = {
+      ...quizData.rounds[selectedRound],
+      questions: addQuestionToCurrentRoundsArray,
+    };
+    const updatedRoundsArray = [...quizData.rounds];
+    updatedRoundsArray.splice(selectedRound, 1, updatedRoundObject);
+
+    const updateObject = { ...quizData, rounds: updatedRoundsArray };
+    quizRef.set(updateObject).then(() => {
+      console.log("Document successfully written!");
+    });
+  };
+
   return (
     <>
       {quizData && (
@@ -87,12 +108,14 @@ const Edit = () => {
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
           handleAddQuestion={addQuestion}
+          handleGenerate={handleGenerate}
         />
       )}
       {!quizData && <h2>Loading...</h2>}
 
       <SpacerBar width={"75%"} />
       {quizData &&
+        quizData.rounds[selectedRound] &&
         quizData.rounds[selectedRound].questions.map((q, index) => (
           <QuestionSingle q={q} qIndex={index} handelDelete={deleteQuestion} />
         ))}

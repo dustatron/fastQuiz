@@ -21,6 +21,7 @@ import HeaderContainer from "./HeaderContainer";
 import Top from "./Top";
 import Left from "./Left";
 import Right from "./Right";
+import Select from "./Select";
 
 export {
   Button,
@@ -45,5 +46,6 @@ export {
   Top,
   Left,
   Right,
+  Select,
   HeaderContainer,
 };
