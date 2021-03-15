@@ -1,37 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import firebase from "firebase";
 import GameCard from "../components/GameCard";
 import { Section } from "../components/Styled";
-
-const fakeData = [
-  {
-    title: "Friday Night Quiz",
-    questions: 10,
-    rounds: 3,
-    created: "10/12/2014",
-  },
-  {
-    title: "Poop Quiz",
-    questions: 3,
-    rounds: 3,
-    created: "10/12/2014",
-  },
-  {
-    title: "Dogs and Cats",
-    questions: 300,
-    rounds: 3,
-    created: "10/12/2014",
-  },
-];
+import withAuth from "../components/WithPrivateRoute";
 
 const games = () => {
+  const [gameList, setGameList] = useState([]);
+  const auth = firebase.auth();
+
+  useEffect(() => {
+    const { uid } = auth.currentUser;
+    firebase
+      .firestore()
+      .collection("quizDB")
+      .where("authId", "==", uid)
+      .onSnapshot((snapShot) => {
+        const gameList = [];
+        snapShot.forEach((doc) => gameList.push({ ...doc.data(), id: doc.id }));
+        setGameList(gameList);
+      });
+  }, []);
+
   return (
     <Section>
       <h1>Games</h1>
-      {fakeData.map((game) => (
-        <GameCard game={game} />
+      {gameList.map((game) => (
+        <>
+          <GameCard game={game} />
+        </>
       ))}
     </Section>
   );
 };
 
-export default games;
+export default withAuth(games);

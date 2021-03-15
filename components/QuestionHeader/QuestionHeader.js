@@ -17,14 +17,48 @@ import {
 import QuestionsGenerate from "../QuestionsGenerate";
 import QuestionsCustom from "../QuestionsCustom";
 
-const QuestionHeader = ({ title }) => {
-  const [showing, setShowing] = useState(0);
+const QuestionHeader = ({
+  quizData,
+  update,
+  selectedRound,
+  setSelectedRound,
+  handleAddQuestion,
+}) => {
+  const { quizName, rounds } = quizData;
+  const [showing, setShowing] = useState(1);
+
+  const addRound = () => {
+    let newRounds = [];
+    if (rounds.length === 0) {
+      newRounds = [{ round: 1, questions: [] }];
+    }
+    if (rounds.length > 0) {
+      newRounds = [
+        ...rounds,
+        { round: rounds[rounds.length - 1].round + 1, questions: [] },
+      ];
+    }
+    const newObject = { ...quizData, rounds: newRounds };
+    update(newObject);
+  };
+
+  const removeRound = () => {
+    let result = confirm("Are you sure you would like to delete this round?");
+    if (result) {
+      const newRounds = [...rounds];
+      newRounds.splice(selectedRound, 1);
+      const newObject = { ...quizData, rounds: newRounds };
+      update(newObject);
+      setSelectedRound(0);
+    }
+  };
+
   return (
-    <Section pad={"1rem 2rem"}>
+    <Section pad={"1rem"} height={"unset"}>
       <HeaderContainer>
         <Top className="top">
           <RowSpacedOut center padTop={"2rem"}>
-            <Header>{title}</Header>
+            <Header>{quizName}</Header>
             <Button>Start</Button>
           </RowSpacedOut>
           <RowCenter>
@@ -33,19 +67,31 @@ const QuestionHeader = ({ title }) => {
         </Top>
 
         <Left className="left">
-          <ButtonShy size={"1.6rem"} margin={"10px auto"}>
+          <ButtonShy onClick={removeRound} size={"1.6rem"} margin={"10px auto"}>
             🗑
           </ButtonShy>
-          <Tab active> Round 1 </Tab>
-          <Tab> Round 2 </Tab>
-          <ButtonAdd>+</ButtonAdd>
+          {rounds &&
+            rounds.map((round, index) => {
+              return (
+                <Tab
+                  onClick={() => {
+                    setSelectedRound(index);
+                  }}
+                  active={index === selectedRound}
+                >
+                  {" "}
+                  Round {round.round}{" "}
+                </Tab>
+              );
+            })}
+          <ButtonAdd onClick={addRound}>+</ButtonAdd>
         </Left>
         <Right className="right">
           <Card>
             <RowSpacedOut top>
               <div>
-                <Header>History</Header>
-                Round 1 Name
+                <Header>Round {rounds[selectedRound].round}</Header>
+                Round {rounds[selectedRound].round} Name
               </div>
               <div>
                 <ButtonShy
@@ -70,7 +116,9 @@ const QuestionHeader = ({ title }) => {
               </div>
             </RowSpacedOut>
             {showing === 0 && <QuestionsGenerate />}
-            {showing === 1 && <QuestionsCustom />}
+            {showing === 1 && (
+              <QuestionsCustom handleAddQuestion={handleAddQuestion} />
+            )}
           </Card>
         </Right>
       </HeaderContainer>

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import NavBody from "./NavBody";
-import ContainerFlex from "../Styled/ContainerFlex";
+// import ContainerFlex from "../Styled/ContainerFlex";
 import Logo from "./Logo";
 import Menu from "./Menu";
 import Item from "./Item";
+import { ButtonShy, ContainerFlex } from "../Styled";
 
 const NavBar = ({ user, signOut, signIn }) => {
   const [selected, setSelected] = useState(0);
@@ -21,24 +22,38 @@ const NavBar = ({ user, signOut, signIn }) => {
           </Link>
         </Logo>
         <Menu>
-          <Item active={selected === 1}>
+          <Item>
             <Link href="/make">
-              <a onClick={() => setSelected(1)}>Make</a>
+              <ButtonShy
+                white
+                active={selected === 1}
+                onClick={() => setSelected(1)}
+              >
+                Make
+              </ButtonShy>
             </Link>
           </Item>
-          <Item active={selected === 2}>
+          <Item>
             <Link href="/games">
-              <a onClick={() => setSelected(2)}>games</a>
+              <ButtonShy
+                active={selected === 2}
+                white
+                onClick={() => setSelected(2)}
+              >
+                games
+              </ButtonShy>
             </Link>
           </Item>
-          <Item active={selected === 3}>
-            <Link href="/blocked">
-              {user ? (
-                <a onClick={signOut}>Sign Out</a>
-              ) : (
-                <a onClick={signIn}>Sign In</a>
-              )}
-            </Link>
+          <Item>
+            {user ? (
+              <ButtonShy active={selected === 3} white onClick={signOut}>
+                Sign Out
+              </ButtonShy>
+            ) : (
+              <ButtonShy white onClick={signIn}>
+                Sign In
+              </ButtonShy>
+            )}
           </Item>
         </Menu>
       </ContainerFlex>

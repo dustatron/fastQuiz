@@ -16,7 +16,7 @@ import {
 import { clean } from "../../helpers";
 
 const QuestionSingle = ({
-  number,
+  qIndex,
   handelDelete,
   q: { question, correct_answer, incorrect_answers },
 }) => {
@@ -31,7 +31,10 @@ const QuestionSingle = ({
     <Section height={"1rem"} pad={"1rem 2rem"}>
       <HeaderContainer>
         <Left>
-          <Tab active> Delete </Tab>
+          <Tab active onClick={() => handelDelete(qIndex)}>
+            {" "}
+            Delete{" "}
+          </Tab>
           <Tab active> Edit </Tab>
           <Tab active> Answers </Tab>
         </Left>

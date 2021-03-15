@@ -1,11 +1,13 @@
-import { useState } from "react";
+import React, { useContext } from "react";
+import GlobalContext, { globalDispatchContext } from "../helpers/GlobalContext";
+import { LOG_USER_IN, LOG_USER_OUT } from "../helpers/constants";
 // Firebase deps
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
 // Hooks
-import { useAuthState, useDarkMode } from "../helpers";
+import { useAuthState } from "../helpers";
 
 import NavBar from "../components/NavBar";
 import GlobalStyle from "../helpers/globalStyles";
@@ -28,13 +30,15 @@ if (!firebase.apps.length) {
 }
 
 function FastQuiz({ Component, pageProps }) {
-  const { user, initializing } = useAuthState(firebase.auth());
+  const dispatch = useContext(globalDispatchContext);
+
+  const { user, initializing } = useAuthState(firebase.auth(), dispatch);
 
   const signInWithGoogle = async () => {
     // Retrieve Google provider object
     const provider = new firebase.auth.GoogleAuthProvider();
     // Set language to the default browser preference
-    // firebase.auth().useDeviceLanguage();
+    firebase.auth().useDeviceLanguage();
     // Start sign in process
     try {
       await firebase.auth().signInWithPopup(provider);
@@ -52,13 +56,15 @@ function FastQuiz({ Component, pageProps }) {
   };
 
   return (
-    <>
+    <GlobalContext>
       <GlobalStyle />
       <NavBar user={user} signOut={signOut} signIn={signInWithGoogle} />
+      {/* TODO: Make this initializing pretty */}
+      {initializing && "...loading"}
       <Container>
         <Component {...pageProps} />
       </Container>
-    </>
+    </GlobalContext>
   );
 }
 

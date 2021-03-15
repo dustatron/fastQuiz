@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useContext } from "react";
+import { LOG_USER_IN, LOG_USER_OUT } from "../helpers/constants";
 
 export function useFirestoreQuery(query) {
   const [docs, setDocs] = useState([]);
@@ -39,7 +40,7 @@ export function useFirestoreQuery(query) {
   return docs;
 }
 
-export function useAuthState(auth) {
+export function useAuthState(auth, dispatch) {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(() => auth.currentUser);
 

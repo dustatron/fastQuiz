@@ -2,6 +2,7 @@ import React from "react";
 import { SpacerBar } from "../components/Styled";
 import QuestionHeader from "../components/QuestionHeader";
 import QuestionSingle from "../components/QuestionSingle";
+import withAuth from "../components/WithPrivateRoute";
 
 const fakeData = {
   gameTitle: "Friday Night Quiz",
@@ -31,4 +32,4 @@ const make = () => {
   );
 };
 
-export default make;
+export default withAuth(make);
