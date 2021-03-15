@@ -1,5 +1,19 @@
 import React from "react";
 import { Section, Detail, TitleLarge, RowCenter, Button } from "../Styled";
+import firebase from "firebase/app";
+
+const signInWithGoogle = async () => {
+  // Retrieve Google provider object
+  const provider = new firebase.auth.GoogleAuthProvider();
+  // Set language to the default browser preference
+  firebase.auth().useDeviceLanguage();
+  // Start sign in process
+  try {
+    await firebase.auth().signInWithPopup(provider);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 const Blocked = () => {
   return (
@@ -11,7 +25,7 @@ const Blocked = () => {
         Please Login
       </TitleLarge>
       <RowCenter>
-        <Button>Login</Button>
+        <Button onClick={signInWithGoogle}>Login</Button>
       </RowCenter>
     </Section>
   );

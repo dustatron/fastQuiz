@@ -15,16 +15,25 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
   const router = useRouter();
   const quizDBRef = firebase.firestore().collection("quizDB");
 
+  const getQuestionsAmount = () => {
+    return rounds.reduce((total, current) => {
+      return current.questions.length + total;
+    }, 0);
+  };
+
   const handleDelete = () => {
-    quizDBRef
-      .doc(id)
-      .delete()
-      .then(() => {
-        console.log("Document successfully deleted!");
-      })
-      .catch((error) => {
-        console.error("Error removing document: ", error);
-      });
+    const results = confirm("You want to delete this game?");
+    if (results) {
+      quizDBRef
+        .doc(id)
+        .delete()
+        .then(() => {
+          console.log("Document successfully deleted!");
+        })
+        .catch((error) => {
+          console.error("Error removing document: ", error);
+        });
+    }
   };
 
   return (
@@ -38,10 +47,11 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
       <RowSpacedOut bottom>
         <RowSide>
           <Detail marginR={"5px"} borderR>
-            Questions: coming soon
+            Questions: {getQuestionsAmount()}
           </Detail>
           <Detail marginR={"5px"} borderR>
-            Rounds: {rounds.length}
+            {rounds.length <= 1 ? "Round" : "Rounds"}:
+            {rounds.length > 0 && rounds.length}
           </Detail>
           <Detail>
             Created: {createdAt.toDate().toLocaleTimeString("en-US")}
