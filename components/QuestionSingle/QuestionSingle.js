@@ -10,7 +10,6 @@ import {
   Left,
   Right,
   Tab,
-  RowSpacedOut,
 } from "../Styled";
 
 import { clean } from "../../helpers";
@@ -20,7 +19,8 @@ const QuestionSingle = ({
   handelDelete,
   q: { question, correct_answer, incorrect_answers },
 }) => {
-  const [display, setDisplay] = useState([]);
+  const [shuffledQuestions, setDisplay] = useState([]);
+  const [isShowingAnswer, setIsShowingAnswer] = useState(false);
 
   useEffect(() => {
     const options = [correct_answer, ...incorrect_answers];
@@ -31,24 +31,31 @@ const QuestionSingle = ({
     <Section height={"1rem"} pad={"1rem 2rem"}>
       <HeaderContainer>
         <Left>
-          <Tab active onClick={() => handelDelete(qIndex)}>
-            {" "}
-            Delete{" "}
+          <Tab onClick={() => handelDelete(qIndex)}>Delete </Tab>
+          <Tab> Edit </Tab>
+          <Tab
+            active={isShowingAnswer}
+            onClick={() => {
+              setIsShowingAnswer(!isShowingAnswer);
+            }}
+          >
+            Answer
           </Tab>
-          <Tab active> Edit </Tab>
-          <Tab active> Answers </Tab>
         </Left>
         <Right>
           <Card height={"14rem"}>
-            <Header>{question}</Header>
             <RowCenter>
-              {display.map((q, index) => (
+              <Header>{clean(question)}</Header>
+            </RowCenter>
+            <RowCenter>
+              {shuffledQuestions.map((q, index) => (
                 <Button
                   white
                   margin={"10px"}
                   width={"80%"}
                   pad={"1.3em 2em"}
                   key={`${q[0]}-${index}`}
+                  active={isShowingAnswer && correct_answer === q}
                   onClick={(e) => {
                     console.log(q);
                   }}

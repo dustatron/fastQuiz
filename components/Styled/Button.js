@@ -22,6 +22,12 @@ const Button = styled.button`
     css`
       width: ${props.width};
     `}
+  ${(props) =>
+    props.active &&
+    css`
+      font-weight: 900;
+      background: lightblue;
+    `}
 `;
 
 export default Button;

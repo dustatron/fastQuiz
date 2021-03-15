@@ -3,10 +3,10 @@ import { useRouter } from "next/router";
 import firebase from "firebase";
 import { fetchQuizApi } from "../../helpers";
 // Components
-import { SpacerBar } from "../../components/Styled";
 import QuestionHeader from "../../components/QuestionHeader";
 import QuestionSingle from "../../components/QuestionSingle";
 import withAuth from "../../components/WithPrivateRoute";
+import { SpacerBar, Spinner, RowCenter } from "../../components/Styled";
 
 const fakeData = {
   gameTitle: "Friday Night Quiz",
@@ -115,10 +115,16 @@ const Edit = () => {
 
       <SpacerBar width={"75%"} />
       {quizData &&
+        !isShowingSpinner &&
         quizData.rounds[selectedRound] &&
         quizData.rounds[selectedRound].questions.map((q, index) => (
           <QuestionSingle q={q} qIndex={index} handelDelete={deleteQuestion} />
         ))}
+      {isShowingSpinner && (
+        <RowCenter>
+          <Spinner />
+        </RowCenter>
+      )}
     </>
   );
 };

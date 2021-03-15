@@ -22,6 +22,7 @@ import Top from "./Top";
 import Left from "./Left";
 import Right from "./Right";
 import Select from "./Select";
+import Spinner from "./Spinner";
 
 export {
   Button,
@@ -48,4 +49,5 @@ export {
   Right,
   Select,
   HeaderContainer,
+  Spinner,
 };

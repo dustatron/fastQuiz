@@ -11,7 +11,7 @@ import { useAuthState } from "../helpers";
 
 import NavBar from "../components/NavBar";
 import GlobalStyle from "../helpers/globalStyles";
-import Container from "../components/Styled/Container";
+import { Container, Spinner, Section, RowCenter } from "../components/Styled";
 
 /* Check if firebase is already initialized */
 if (!firebase.apps.length) {
@@ -60,7 +60,11 @@ function FastQuiz({ Component, pageProps }) {
       <GlobalStyle />
       <NavBar user={user} signOut={signOut} signIn={signInWithGoogle} />
       {/* TODO: Make this initializing pretty */}
-      {initializing && "...loading"}
+      {initializing && (
+        <RowCenter padTop={"2rem"}>
+          <Spinner />
+        </RowCenter>
+      )}
       <Container>
         <Component {...pageProps} />
       </Container>
