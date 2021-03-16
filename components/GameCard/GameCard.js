@@ -66,7 +66,14 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
           >
             Edit
           </Button>
-          <Button margin={"5px"}>Play</Button>
+          <Button
+            onClick={() => {
+              router.push(`/play/${id}`);
+            }}
+            margin={"5px"}
+          >
+            Play
+          </Button>
         </RowSide>
       </RowSpacedOut>
     </Card>

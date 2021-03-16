@@ -28,14 +28,15 @@ const Edit = () => {
   const [isShowingSpinner, setIsShowingSpinner] = useState(false);
 
   const router = useRouter();
-  const quizId = router.query.id;
-  const quizRef = firebase.firestore().collection("quizDB").doc(quizId[0]);
+  const { id } = router.query;
+  const quizRef = firebase.firestore().collection("quizDB").doc(id);
 
   useEffect(() => {
-    quizRef.onSnapshot((doc) => {
+    const unSubscribe = quizRef.onSnapshot((doc) => {
       const data = doc.data();
       setQuizData(data);
     });
+    return unSubscribe;
   }, []);
 
   const handleUpdate = (updateObject) => {
