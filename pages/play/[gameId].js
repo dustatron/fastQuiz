@@ -11,15 +11,18 @@ import {
   Button,
   RowSide,
 } from "../../components/Styled";
-import QuestionSingle from "../../components/QuestionSingle";
+import PlayRound from "../../components/PlayRound";
+import PlayQuestion from "../../components/PlayQuestion";
+import PlayEnd from "../../components/PlayEnd";
 
 const play = ({ router }) => {
   const { gameId } = router.query;
   const [hostname, setHostname] = useState(null);
   const [gameData, setGameData] = useState(null);
   const [players, setPlayers] = useState([]);
+  const [playerData, setPlayerData] = useState(null);
 
-  const { uid, displayName, photoURL } = firebase.auth().currentUser;
+  const user = firebase.auth().currentUser;
 
   const gameRef = firebase.firestore().collection("quizDB").doc(gameId);
 
@@ -27,26 +30,19 @@ const play = ({ router }) => {
     .firestore()
     .collection(`quizDB/${gameId}/players`);
 
-  const hasUserJoined = async () => {
+  const addNewUser = async (game) => {
     const doesNotHaveUser = await gameRef
       .collection("players")
-      .where("Id", "==", uid)
+      .where("Id", "==", user.uid)
       .get()
       .then((docs) => docs.empty);
 
-    if (uid !== gameData.authId && doesNotHaveUser) {
-      return false;
-    }
-    return true;
-  };
-
-  const addNewUser = async (game) => {
-    if (!hasUserJoined(game)) {
+    if (doesNotHaveUser) {
       await gameRef.collection("players").add({
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        name: displayName,
-        Id: uid,
-        photo: photoURL,
+        name: user.displayName,
+        Id: user.uid,
+        photo: user.photoURL,
         score: 0,
       });
     }
@@ -58,6 +54,7 @@ const play = ({ router }) => {
     setHostname(window.location.hostname);
 
     let unSubscribe;
+
     if (!gameData) {
       unSubscribe = gameRef.onSnapshot((doc) => {
         const data = doc.data();
@@ -78,7 +75,8 @@ const play = ({ router }) => {
       setPlayers(playerList);
     });
 
-    return unSubscribe;
+    // playersRef.where('Id', '==', user.uid)
+    // return unSubscribe;
   }, [gameData]);
 
   const startGame = () => {
@@ -93,11 +91,11 @@ const play = ({ router }) => {
         createGame.push({
           ...thisRound.questions[q],
           type: "question",
-          round: q + 1,
+          round: thisRound.round,
         });
       }
     }
-
+    // Update firestore
     const updateGameData = {
       ...gameData,
       gamePlayable: createGame,
@@ -120,31 +118,39 @@ const play = ({ router }) => {
     });
   };
 
+  const restartGame = () => {
+    const updateGameData = {
+      ...gameData,
+      gameStarted: false,
+      gameEnd: false,
+      gameCurrentSlide: 0,
+    };
+    gameRef.set(updateGameData).then(() => {
+      console.log("Game Created and set");
+    });
+  };
+
   return (
     <>
-      <Section>
-        <Card>
-          {gameData && <Title> Share : {gameData.quizName}</Title>}
-          <Input value={`${hostname}/play/${gameId}`} />
-        </Card>
-        <Card lite>
-          <RowCenter>
-            <div>
-              <h3>{gameData && gameData.authName}</h3>
-              {gameData && <img src={gameData.authPhoto} alt="author" />}
-            </div>
-            {players &&
-              players.map((player) => (
-                <div>
-                  <h3>{player.name}</h3>
-                  <img src={player.photo} alt="author" />
-                </div>
-              ))}
-          </RowCenter>
-        </Card>
+      {!gameData?.gameStarted && (
+        <Section>
+          <Card>
+            {gameData && <Title> Share : {gameData.quizName}</Title>}
+            <Input value={`${hostname}/play/${gameId}`} />
+          </Card>
+          <Card lite>
+            <RowCenter>
+              {players &&
+                players.map((player) => (
+                  <div>
+                    <h3>{player.name}</h3>
+                    <img src={player.photo} alt="author" />
+                  </div>
+                ))}
+            </RowCenter>
+          </Card>
 
-        <RowSide end>
-          {gameData && !hasUserJoined() && (
+          <RowSide end>
             <Button
               onClick={() => {
                 addNewUser(gameData);
@@ -152,13 +158,13 @@ const play = ({ router }) => {
             >
               Join
             </Button>
-          )}
 
-          {gameData && uid === gameData.authId && (
-            <Button onClick={startGame}> Start </Button>
-          )}
-        </RowSide>
-      </Section>
+            {gameData && user.uid === gameData.authId && (
+              <Button onClick={startGame}> Start </Button>
+            )}
+          </RowSide>
+        </Section>
+      )}
 
       {/*/////////// SHOW GAME SLIDES ////////////////*/}
       {gameData?.gameStarted && (
@@ -168,18 +174,35 @@ const play = ({ router }) => {
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
               "round" && (
               <div>
-                Round {gameData.gamePlayable[gameData.gameCurrentSlide]?.round}
+                <PlayRound
+                  round={
+                    gameData.gamePlayable[gameData.gameCurrentSlide]?.round
+                  }
+                  players={players}
+                  uid={user.uid}
+                />
               </div>
             )}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
               "question" && (
               <div>
-                {gameData.gamePlayable[gameData.gameCurrentSlide]?.question}
+                <PlayQuestion
+                  question={gameData.gamePlayable[gameData.gameCurrentSlide]}
+                  count={gameData.gameCurrentSlide}
+                  gameId={gameId}
+                  // handleUpdateScore={updateScore}
+                />
+                {/* {gameData.gamePlayable[gameData.gameCurrentSlide]?.question} */}
               </div>
             )}
 
-          {gameData?.gameEnd && <div> Game over</div>}
+          {gameData?.gameEnd && (
+            <div>
+              <PlayEnd />
+              <Button onClick={restartGame}> Restart </Button>
+            </div>
+          )}
           {!gameData.gameEnd && <Button onClick={advanceSlide}>Next</Button>}
         </Section>
       )}
