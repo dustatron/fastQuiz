@@ -14,6 +14,7 @@ const clean = (string) => {
     .replace(/&rsquo;/g, "'")
     .replace(/&amp;/g, "&")
     .replace(/&ouml;/g, "ö")
+    .replace(/&eacute;/g, "ê")
     .replace(/&uuml;/g, "ü");
 };
 

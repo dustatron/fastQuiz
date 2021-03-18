@@ -22,6 +22,7 @@ const play = ({ router }) => {
   const [gameData, setGameData] = useState(null);
   const [players, setPlayers] = useState([]);
   const [playerData, setPlayerData] = useState(null);
+  const [usersHavePlayed, setUsersHavePlayed] = useState([]);
 
   const user = firebase.auth().currentUser;
 
@@ -37,13 +38,13 @@ const play = ({ router }) => {
     setHostname(window.location.hostname);
 
     let unSubscribe;
-
     if (!gameData) {
       unSubscribe = gameRef.onSnapshot((doc) => {
         const data = doc.data();
         setGameData(data);
       });
     }
+
     // return unSubscribe;
   }, [gameData]);
 
@@ -58,11 +59,50 @@ const play = ({ router }) => {
       setPlayers(playerList);
     });
 
+    playersRef
+      .where("Id", "==", user.uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const data = { docId: doc.id, ...doc.data() };
+          setPlayerData({ docId: doc.id, ...doc.data() });
+        });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+
     // playersRef.where('Id', '==', user.uid)
     // return unSubscribe;
   }, [gameData]);
 
-  const addNewUser = async (game) => {
+  useEffect(() => {
+    if (gameData && playerData) {
+      playerHastakenTurn();
+    }
+  }, [players]);
+
+  const playerHastakenTurn = async () => {
+    const currentQuestion =
+      gameData.gamePlayable[gameData.gameCurrentSlide].question;
+    const isAnswer =
+      gameData.gamePlayable[gameData.gameCurrentSlide].type === "answer";
+    if (isAnswer) {
+      console.log("answer");
+      await setUsersHavePlayed([]);
+    }
+
+    if (currentQuestion && !isAnswer) {
+      const havePlayed = players.map((player) => ({
+        name: player.name,
+        photo: player.photo,
+        hasPlayed: player.theQuestion.includes(currentQuestion),
+      }));
+      await setUsersHavePlayed(havePlayed);
+    }
+  };
+
+  const addNewUser = async () => {
     const doesNotHaveUser = await gameRef
       .collection("players")
       .where("Id", "==", user.uid)
@@ -76,6 +116,8 @@ const play = ({ router }) => {
         Id: user.uid,
         photo: user.photoURL,
         score: 0,
+        userAnswer: ["userAnswer"],
+        theQuestion: ["question"],
       });
     }
   };
@@ -141,6 +183,19 @@ const play = ({ router }) => {
     });
   };
 
+  const addUserGuess = async (userGuess, correct_answer, question) => {
+    const getScore = correct_answer === correct_answer ? 1 : 0;
+
+    const newScore = {
+      ...playerData,
+      score: playerData.score + getScore,
+      theQuestion: [...playerData.theQuestion, question],
+      userAnswer: [...playerData.userAnswer, userGuess],
+    };
+    setPlayerData(newScore);
+    playersRef.doc(playerData.docId).set(newScore);
+  };
+
   return (
     <>
       {!gameData?.gameStarted && (
@@ -180,7 +235,7 @@ const play = ({ router }) => {
       {/*/////////// SHOW GAME SLIDES ////////////////*/}
       {gameData?.gameStarted && (
         <Section>
-          <h2>Game Started</h2>
+          {/* <h2>Game Started</h2> */}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
               "round" && (
@@ -202,6 +257,8 @@ const play = ({ router }) => {
                   question={gameData.gamePlayable[gameData.gameCurrentSlide]}
                   count={gameData.gameCurrentSlide}
                   gameId={gameId}
+                  addUserGuess={addUserGuess}
+                  usersHavePlayed={usersHavePlayed}
                 />
               </div>
             )}
@@ -215,13 +272,15 @@ const play = ({ router }) => {
               </div>
             )}
 
-          {gameData?.gameEnd && (
+          {gameData?.gameEnd && playerData?.Id === gameData.authId && (
             <div>
-              <PlayEnd />
+              <PlayEnd players={players} />
               <Button onClick={restartGame}> Restart </Button>
             </div>
           )}
-          {!gameData.gameEnd && <Button onClick={advanceSlide}>Next</Button>}
+          {!gameData.gameEnd && playerData?.Id === gameData.authId && (
+            <Button onClick={advanceSlide}>Next</Button>
+          )}
         </Section>
       )}
     </>
