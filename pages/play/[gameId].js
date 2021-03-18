@@ -23,6 +23,7 @@ const play = ({ router }) => {
   const [players, setPlayers] = useState([]);
   const [playerData, setPlayerData] = useState(null);
   const [usersHavePlayed, setUsersHavePlayed] = useState([]);
+  const [readyToAdvance, setReadyToAdvance] = useState(false);
 
   const user = firebase.auth().currentUser;
 
@@ -87,9 +88,11 @@ const play = ({ router }) => {
       gameData.gamePlayable[gameData.gameCurrentSlide].question;
     const isAnswer =
       gameData.gamePlayable[gameData.gameCurrentSlide].type === "answer";
+
     if (isAnswer) {
       console.log("answer");
       await setUsersHavePlayed([]);
+      return setReadyToAdvance(true);
     }
 
     if (currentQuestion && !isAnswer) {
@@ -100,6 +103,17 @@ const play = ({ router }) => {
       }));
       await setUsersHavePlayed(havePlayed);
     }
+    const allUsersHavePlayed = usersHavePlayed.reduce((answer, el) => {
+      if (el.hasPlayed) {
+        return answer;
+      }
+      return false;
+    }, true);
+
+    if (allUsersHavePlayed && usersHavePlayed.length > 1) {
+      return setReadyToAdvance(true);
+    }
+    return setReadyToAdvance(false);
   };
 
   const addNewUser = async () => {
@@ -280,6 +294,9 @@ const play = ({ router }) => {
           )}
           {!gameData.gameEnd && playerData?.Id === gameData.authId && (
             <Button onClick={advanceSlide}>Next</Button>
+          )}
+          {readyToAdvance && playerData?.Id === gameData.authId && (
+            <Button>ready</Button>
           )}
         </Section>
       )}
