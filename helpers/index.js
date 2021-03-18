@@ -13,7 +13,8 @@ const clean = (string) => {
     .replace(/&#039;/g, "'")
     .replace(/&rsquo;/g, "'")
     .replace(/&amp;/g, "&")
-    .replace(/&ouml;/g, "ö");
+    .replace(/&ouml;/g, "ö")
+    .replace(/&uuml;/g, "ü");
 };
 
 export {

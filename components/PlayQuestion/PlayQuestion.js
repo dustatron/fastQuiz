@@ -51,12 +51,9 @@ const PlayQuestion = ({
 
   return (
     <Card>
-      <Title>
-        Round {round} : Question # {count}
-      </Title>
+      <Title>{clean(question)}</Title>
       <SpacerBar white />
       <RowCenter>
-        <Header>{clean(question)}</Header>
         {shuffledQuestions.map((q, index) => (
           <Button
             white

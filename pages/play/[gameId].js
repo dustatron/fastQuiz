@@ -13,6 +13,7 @@ import {
 } from "../../components/Styled";
 import PlayRound from "../../components/PlayRound";
 import PlayQuestion from "../../components/PlayQuestion";
+import PlayAnswer from "../../components/PlayAnswer";
 import PlayEnd from "../../components/PlayEnd";
 
 const play = ({ router }) => {
@@ -29,24 +30,6 @@ const play = ({ router }) => {
   const playersRef = firebase
     .firestore()
     .collection(`quizDB/${gameId}/players`);
-
-  const addNewUser = async (game) => {
-    const doesNotHaveUser = await gameRef
-      .collection("players")
-      .where("Id", "==", user.uid)
-      .get()
-      .then((docs) => docs.empty);
-
-    if (doesNotHaveUser) {
-      await gameRef.collection("players").add({
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        name: user.displayName,
-        Id: user.uid,
-        photo: user.photoURL,
-        score: 0,
-      });
-    }
-  };
 
   /* get snapshot of current game */
   /* get window location and set it to state */
@@ -79,6 +62,24 @@ const play = ({ router }) => {
     // return unSubscribe;
   }, [gameData]);
 
+  const addNewUser = async (game) => {
+    const doesNotHaveUser = await gameRef
+      .collection("players")
+      .where("Id", "==", user.uid)
+      .get()
+      .then((docs) => docs.empty);
+
+    if (doesNotHaveUser) {
+      await gameRef.collection("players").add({
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        name: user.displayName,
+        Id: user.uid,
+        photo: user.photoURL,
+        score: 0,
+      });
+    }
+  };
+
   const startGame = () => {
     const allRounds = gameData.rounds;
     let createGame = [];
@@ -88,10 +89,20 @@ const play = ({ router }) => {
       const thisRound = allRounds[r];
       createGame.push({ type: "round", round: thisRound.round });
       for (let q = 0; q < thisRound.questions.length; q++) {
+        // question
         createGame.push({
           ...thisRound.questions[q],
           type: "question",
           round: thisRound.round,
+        });
+
+        //answer
+        createGame.push({
+          type: "answer",
+          round: thisRound.round,
+          question: thisRound.questions[q].question,
+          answer: thisRound.questions[q].correct_answer,
+          questionsLeftInRound: `${q + 1} of ${thisRound.questions.length}`,
         });
       }
     }
@@ -191,9 +202,16 @@ const play = ({ router }) => {
                   question={gameData.gamePlayable[gameData.gameCurrentSlide]}
                   count={gameData.gameCurrentSlide}
                   gameId={gameId}
-                  // handleUpdateScore={updateScore}
                 />
-                {/* {gameData.gamePlayable[gameData.gameCurrentSlide]?.question} */}
+              </div>
+            )}
+          {!gameData.gameEnd &&
+            gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
+              "answer" && (
+              <div>
+                <PlayAnswer
+                  answerData={gameData.gamePlayable[gameData.gameCurrentSlide]}
+                />
               </div>
             )}
 
