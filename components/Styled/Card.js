@@ -3,8 +3,8 @@ import colors from "../../helpers/colors";
 
 const Card = styled.div`
   margin: 1em auto;
-  padding: 2rem 2rem;
-  text-align: right;
+  padding: ${(props) => (props.pad ? props.pad : " 2rem 2rem")};
+  text-align: ${(props) => (props.textLeft ? "left" : "right")};
   color: ${(props) => (props.lite ? colors.black : colors.white)};
   background: ${(props) => (props.lite ? colors.gray : colors.black)};
   border-radius: 6px;

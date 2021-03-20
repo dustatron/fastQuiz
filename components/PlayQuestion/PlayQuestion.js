@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import firebase from "firebase";
 import { shuffle } from "lodash";
+import PlayerCard from "../PlayerCard";
 import { Card, Button, Header, RowCenter, Title, SpacerBar } from "../Styled";
 import { clean } from "../../helpers";
 
@@ -31,37 +31,41 @@ const PlayQuestion = ({
   };
 
   return (
-    <Card>
-      <Title>{clean(question)}</Title>
-      <SpacerBar white />
+    <>
+      <Card>
+        <Title>{clean(question)}</Title>
+        <SpacerBar white />
+        <RowCenter>
+          {shuffledQuestions.map((q, index) => (
+            <Button
+              white
+              margin={"10px"}
+              width={"80%"}
+              pad={"1.3em 2em"}
+              key={`${q[0]}-${index}`}
+              active={q === selected}
+              onClick={() => {
+                handleSelect(q, correct_answer, question, addUserGuess);
+              }}
+            >
+              {clean(q)}
+            </Button>
+          ))}
+        </RowCenter>
+      </Card>
       <RowCenter>
-        {shuffledQuestions.map((q, index) => (
-          <Button
-            white
-            margin={"10px"}
-            width={"80%"}
-            pad={"1.3em 2em"}
-            key={`${q[0]}-${index}`}
-            active={q === selected}
-            onClick={() => {
-              handleSelect(q, correct_answer, question, addUserGuess);
-            }}
-          >
-            {clean(q)}
-          </Button>
-        ))}
+        {usersHavePlayed &&
+          usersHavePlayed.map((user) => (
+            <>
+              {user.hasPlayed && (
+                <div>
+                  <PlayerCard name={user.name} photo={user.photo} />
+                </div>
+              )}
+            </>
+          ))}
       </RowCenter>
-      {usersHavePlayed &&
-        usersHavePlayed.map((user) => (
-          <>
-            {user.hasPlayed && (
-              <div>
-                {user.name} has played <img src={user.photo} alt="" />
-              </div>
-            )}
-          </>
-        ))}
-    </Card>
+    </>
   );
 };
 

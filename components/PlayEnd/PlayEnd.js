@@ -1,21 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card, Button, Header, RowCenter, Title, SpacerBar } from "../Styled";
+import PlayerCard from "../PlayerCard";
+import { Card, Button, Header, RowSide, Title, SpacerBar } from "../Styled";
 
 const PlayEnd = ({ players }) => {
   return (
-    <RowCenter>
+    <Card lite>
       <Header>Game Over</Header>
       <SpacerBar />
-      {players &&
-        players.map((player) => (
-          <div>
-            <h3>{player.name}</h3>
-            <img src={player.photo} alt="author" />
-            score : {player.score}
-          </div>
-        ))}
-    </RowCenter>
+      <RowSide>
+        {players &&
+          players.map((player) => (
+            <>
+              <PlayerCard
+                name={player.name}
+                photo={player.photo}
+                score={player.score}
+              />
+            </>
+          ))}
+      </RowSide>
+    </Card>
   );
 };
 

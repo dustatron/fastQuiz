@@ -18,13 +18,12 @@ const PlayAnswer = ({
       <Title>Question {questionsLeftInRound}</Title>
       <Title>ROUND : {round}</Title>
       <Card>
-        <Header> {clean(question)} </Header>
+        <Title> The Correct Answer Was </Title>
         <SpacerBar white />
 
-        <Title justify={"left"}>Correct answer was</Title>
-        <RowSide>
+        <RowCenter>
           <Header>{clean(answer)}</Header>
-        </RowSide>
+        </RowCenter>
       </Card>
     </>
   );

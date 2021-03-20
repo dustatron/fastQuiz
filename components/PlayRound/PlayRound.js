@@ -1,21 +1,22 @@
 import React from "react";
-import { Card, Button, Header, RowCenter, Title, SpacerBar } from "../Styled";
+import PlayerCard from "../PlayerCard";
+import { Card, Button, RowSide, Title, SpacerBar } from "../Styled";
 
 const PlayRound = ({ round, players }) => {
   return (
     <Card lite>
       <Title>Round {round}</Title>
       <SpacerBar />
-      <RowCenter>
+      <RowSide>
         {players &&
           players.map((player) => (
-            <div>
-              <h3>{player.name}</h3>
-              <img src={player.photo} alt="author" />
-              score : {player.score}
-            </div>
+            <PlayerCard
+              name={player.name}
+              photo={player.photo}
+              score={player.score}
+            />
           ))}
-      </RowCenter>
+      </RowSide>
     </Card>
   );
 };

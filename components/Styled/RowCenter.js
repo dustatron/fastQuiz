@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const RowCenter = styled.div`
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   flex-wrap: wrap;
   justify-content: center;

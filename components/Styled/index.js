@@ -23,6 +23,9 @@ import Left from "./Left";
 import Right from "./Right";
 import Select from "./Select";
 import Spinner from "./Spinner";
+import CardSmall from "./CardSmall";
+import ImageCircle from "./ImageCircle";
+import ScoreBox from "./ScoreBox";
 
 export {
   Button,
@@ -50,4 +53,7 @@ export {
   Select,
   HeaderContainer,
   Spinner,
+  CardSmall,
+  ImageCircle,
+  ScoreBox,
 };

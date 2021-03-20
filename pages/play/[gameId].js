@@ -2,19 +2,12 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "next/router";
 import firebase from "firebase";
 import withAuth from "../../components/WithPrivateRoute";
-import {
-  Section,
-  Card,
-  Title,
-  Input,
-  RowCenter,
-  Button,
-  RowSide,
-} from "../../components/Styled";
+import { Section, Button, RowSpacedOut } from "../../components/Styled";
 import PlayRound from "../../components/PlayRound";
 import PlayQuestion from "../../components/PlayQuestion";
 import PlayAnswer from "../../components/PlayAnswer";
 import PlayEnd from "../../components/PlayEnd";
+import PlayWaitingRoom from "../../components/PlayWaitingRoom";
 
 const play = ({ router }) => {
   const { gameId } = router.query;
@@ -26,7 +19,6 @@ const play = ({ router }) => {
   const [readyToAdvance, setReadyToAdvance] = useState(false);
 
   const user = firebase.auth().currentUser;
-
   const gameRef = firebase.firestore().collection("quizDB").doc(gameId);
 
   const playersRef = firebase
@@ -129,7 +121,7 @@ const play = ({ router }) => {
         name: user.displayName,
         Id: user.uid,
         photo: user.photoURL,
-        score: 0,
+        score: 1,
         userAnswer: ["userAnswer"],
         theQuestion: ["question"],
       });
@@ -193,8 +185,14 @@ const play = ({ router }) => {
       gameCurrentSlide: 0,
     };
     gameRef.set(updateGameData).then(() => {
-      console.log("Game Created and set");
+      console.log("Game has been restarted");
     });
+
+    playersRef.get().then((snapShop) =>
+      snapShop.forEach((player) => {
+        playersRef.doc(player.id).delete();
+      })
+    );
   };
 
   const addUserGuess = async (userGuess, correct_answer, question) => {
@@ -213,43 +211,20 @@ const play = ({ router }) => {
   return (
     <>
       {!gameData?.gameStarted && (
-        <Section>
-          <Card>
-            {gameData && <Title> Share : {gameData.quizName}</Title>}
-            <Input value={`${hostname}/play/${gameId}`} />
-          </Card>
-          <Card lite>
-            <RowCenter>
-              {players &&
-                players.map((player) => (
-                  <div>
-                    <h3>{player.name}</h3>
-                    <img src={player.photo} alt="author" />
-                  </div>
-                ))}
-            </RowCenter>
-          </Card>
-
-          <RowSide end>
-            <Button
-              onClick={() => {
-                addNewUser(gameData);
-              }}
-            >
-              Join
-            </Button>
-
-            {gameData && user.uid === gameData.authId && (
-              <Button onClick={startGame}> Start </Button>
-            )}
-          </RowSide>
-        </Section>
+        <PlayWaitingRoom
+          gameData={gameData}
+          user={user}
+          hostname={hostname}
+          gameId={gameId}
+          players={players}
+          startGame={startGame}
+          addNewUser={addNewUser}
+        />
       )}
 
       {/*/////////// SHOW GAME SLIDES ////////////////*/}
       {gameData?.gameStarted && (
         <Section>
-          {/* <h2>Game Started</h2> */}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
               "round" && (
@@ -263,10 +238,12 @@ const play = ({ router }) => {
                 />
               </div>
             )}
+
+          {/* SLIDES  */}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
               "question" && (
-              <div>
+              <>
                 <PlayQuestion
                   question={gameData.gamePlayable[gameData.gameCurrentSlide]}
                   count={gameData.gameCurrentSlide}
@@ -274,7 +251,7 @@ const play = ({ router }) => {
                   addUserGuess={addUserGuess}
                   usersHavePlayed={usersHavePlayed}
                 />
-              </div>
+              </>
             )}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
@@ -285,19 +262,28 @@ const play = ({ router }) => {
                 />
               </div>
             )}
-
           {gameData?.gameEnd && playerData?.Id === gameData.authId && (
             <div>
               <PlayEnd players={players} />
-              <Button onClick={restartGame}> Restart </Button>
             </div>
           )}
-          {!gameData.gameEnd && playerData?.Id === gameData.authId && (
-            <Button onClick={advanceSlide}>Next</Button>
-          )}
-          {readyToAdvance && playerData?.Id === gameData.authId && (
-            <Button>ready</Button>
-          )}
+
+          {/* BUTTONS  */}
+          <RowSpacedOut>
+            <div>
+              {readyToAdvance && playerData?.Id === gameData.authId && (
+                <Button>ready</Button>
+              )}
+            </div>
+            <div>
+              {gameData?.gameEnd && playerData?.Id === gameData.authId && (
+                <Button onClick={restartGame}> Restart </Button>
+              )}
+              {!gameData.gameEnd && playerData?.Id === gameData.authId && (
+                <Button onClick={advanceSlide}>Next</Button>
+              )}
+            </div>
+          </RowSpacedOut>
         </Section>
       )}
     </>
