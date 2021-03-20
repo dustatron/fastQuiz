@@ -30,15 +30,12 @@ const play = ({ router }) => {
   useEffect(() => {
     setHostname(window.location.hostname);
 
-    let unSubscribe;
     if (!gameData) {
-      unSubscribe = gameRef.onSnapshot((doc) => {
+      gameRef.onSnapshot((doc) => {
         const data = doc.data();
         setGameData(data);
       });
     }
-
-    // return unSubscribe;
   }, [gameData]);
 
   /* add User to game and set users data to local state.  */
@@ -154,12 +151,16 @@ const play = ({ router }) => {
         });
       }
     }
+    const totalPoints = gameData.rounds.reduce((total, current) => {
+      return current.questions.length + total;
+    }, 0);
     // Update firestore
     const updateGameData = {
       ...gameData,
       gamePlayable: createGame,
       gameStarted: true,
       gameEnd: false,
+      totalPoints: totalPoints,
       gameCurrentSlide: 0,
     };
     gameRef.set(updateGameData).then(() => {
@@ -196,7 +197,7 @@ const play = ({ router }) => {
   };
 
   const addUserGuess = async (userGuess, correct_answer, question) => {
-    const getScore = correct_answer === correct_answer ? 1 : 0;
+    const getScore = correct_answer === userGuess ? 1 : 0;
 
     const newScore = {
       ...playerData,
@@ -234,7 +235,14 @@ const play = ({ router }) => {
                     gameData.gamePlayable[gameData.gameCurrentSlide]?.round
                   }
                   players={players}
-                  uid={user.uid}
+                  title={
+                    gameData[
+                      `roundTitle${
+                        gameData.gamePlayable[gameData.gameCurrentSlide]
+                          ?.round - 1
+                      }`
+                    ]
+                  }
                 />
               </div>
             )}
@@ -264,7 +272,7 @@ const play = ({ router }) => {
             )}
           {gameData?.gameEnd && playerData?.Id === gameData.authId && (
             <div>
-              <PlayEnd players={players} />
+              <PlayEnd players={players} totalPoints={gameData.totalPoints} />
             </div>
           )}
 

@@ -6,7 +6,7 @@ import { fetchQuizApi } from "../../helpers";
 import QuestionHeader from "../../components/QuestionHeader";
 import QuestionSingle from "../../components/QuestionSingle";
 import withAuth from "../../components/WithPrivateRoute";
-import { SpacerBar, Spinner, RowCenter } from "../../components/Styled";
+import { SpacerBar, Spinner, RowCenter, Title } from "../../components/Styled";
 
 const fakeData = {
   gameTitle: "Friday Night Quiz",
@@ -33,7 +33,7 @@ const Edit = () => {
 
   useEffect(() => {
     const unSubscribe = quizRef.onSnapshot((doc) => {
-      const data = doc.data();
+      const data = { ...doc.data(), id: doc.id };
       setQuizData(data);
     });
     return unSubscribe;
@@ -60,6 +60,16 @@ const Edit = () => {
     const updateObject = { ...quizData, rounds: updatedRoundsArray };
     quizRef.set(updateObject).then(() => {
       console.log("Document successfully written!");
+    });
+  };
+
+  const handleRoundTitle = (roundTitle, roundNumber) => {
+    const updateObject = {
+      ...quizData,
+      [`roundTitle${roundNumber}`]: roundTitle,
+    };
+    quizRef.set(updateObject).then(() => {
+      console.log("Add Round title");
     });
   };
 
@@ -110,11 +120,11 @@ const Edit = () => {
           setSelectedRound={setSelectedRound}
           handleAddQuestion={addQuestion}
           handleGenerate={handleGenerate}
+          handleRoundTitle={handleRoundTitle}
         />
       )}
-      {!quizData && <h2>Loading...</h2>}
-
-      <SpacerBar width={"75%"} />
+      {!quizData && <Title>Loading...</Title>}
+      {quizData && <SpacerBar width={"75%"} />}
       {quizData &&
         !isShowingSpinner &&
         quizData.rounds[selectedRound] &&

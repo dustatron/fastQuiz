@@ -26,7 +26,7 @@ const PlayWaitingRoom = ({
     <Section>
       <Card>
         {gameData && <Title> Share : {gameData.quizName}</Title>}
-        <Input value={`http://${hostname}/play/${gameId}`} />
+        <Input value={`https://${hostname}/play/${gameId}`} />
         <Button
           white
           onClick={() => {

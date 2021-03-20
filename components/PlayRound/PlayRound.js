@@ -1,11 +1,12 @@
 import React from "react";
 import PlayerCard from "../PlayerCard";
-import { Card, Button, RowSide, Title, SpacerBar } from "../Styled";
+import { Card, RowSide, Title, SpacerBar, Header } from "../Styled";
 
-const PlayRound = ({ round, players }) => {
+const PlayRound = ({ round, players, title }) => {
   return (
     <Card lite>
       <Title>Round {round}</Title>
+      <Header>{title ? title : "No Title"}</Header>
       <SpacerBar />
       <RowSide>
         {players &&

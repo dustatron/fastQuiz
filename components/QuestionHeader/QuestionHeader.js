@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import {
   RowSpacedOut,
   Button,
@@ -13,6 +14,9 @@ import {
   Left,
   Right,
   HeaderContainer,
+  TitleLarge,
+  Input,
+  RoundTitleBox,
 } from "../Styled";
 import QuestionsGenerate from "../QuestionsGenerate";
 import QuestionsCustom from "../QuestionsCustom";
@@ -24,9 +28,18 @@ const QuestionHeader = ({
   setSelectedRound,
   handleAddQuestion,
   handleGenerate,
+  handleRoundTitle,
 }) => {
-  const { quizName, rounds } = quizData;
   const [showing, setShowing] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [roundTitle, setRoundTitle] = useState("");
+
+  const { quizName, rounds } = quizData;
+  const router = useRouter();
+
+  useEffect(() => {
+    setRoundTitle(quizData[`roundTitle${selectedRound}`]);
+  }, [selectedRound]);
 
   const addRound = () => {
     let newRounds = [];
@@ -39,8 +52,17 @@ const QuestionHeader = ({
         { round: rounds[rounds.length - 1].round + 1, questions: [] },
       ];
     }
-    const newObject = { ...quizData, rounds: newRounds };
+    const newRoundTitle = `Round ${rounds.length + 1}`;
+
+    const newObject = {
+      ...quizData,
+      rounds: newRounds,
+      [`roundTitle${rounds.length}`]: newRoundTitle,
+    };
     update(newObject);
+    setIsEditing(false);
+    setRoundTitle(newRoundTitle);
+    setSelectedRound(rounds.length);
   };
 
   const removeRound = () => {
@@ -54,13 +76,26 @@ const QuestionHeader = ({
     }
   };
 
+  const editRoundTitle = () => {
+    if (isEditing && quizData[`roundTitle${selectedRound}`] !== roundTitle) {
+      handleRoundTitle(roundTitle, selectedRound);
+    }
+    setIsEditing(!isEditing);
+  };
+
   return (
     <Section pad={"1rem"} height={"unset"}>
       <HeaderContainer>
         <Top className="top">
           <RowSpacedOut center padTop={"2rem"}>
-            <Header>{quizName}</Header>
-            <Button>Start</Button>
+            <TitleLarge dark>{quizName}</TitleLarge>
+            <Button
+              onClick={() => {
+                router.push(`/play/${quizData.id}`);
+              }}
+            >
+              Play
+            </Button>
           </RowSpacedOut>
           <RowCenter>
             <Header> Add Question </Header>
@@ -77,6 +112,7 @@ const QuestionHeader = ({
                 <Tab
                   onClick={() => {
                     setSelectedRound(index);
+                    setRoundTitle(quizData[`roundTitle${index}`]);
                   }}
                   active={index === selectedRound}
                 >
@@ -90,16 +126,19 @@ const QuestionHeader = ({
         <Right className="right">
           <Card>
             <RowSpacedOut top>
-              <div>
-                <Header>
-                  Round{" "}
-                  {quizData.rounds[selectedRound] &&
-                    rounds[selectedRound].round}
-                </Header>
-                Round{" "}
-                {quizData.rounds[selectedRound] && rounds[selectedRound].round}{" "}
-                Name
-              </div>
+              <RoundTitleBox>
+                <ButtonShy onClick={editRoundTitle}>⚙️</ButtonShy>
+                {isEditing ? (
+                  <Input
+                    value={roundTitle}
+                    onChange={(e) => {
+                      setRoundTitle(e.target.value);
+                    }}
+                  />
+                ) : (
+                  <Header>{roundTitle}</Header>
+                )}
+              </RoundTitleBox>
               <div>
                 <ButtonShy
                   white

@@ -26,6 +26,8 @@ import Spinner from "./Spinner";
 import CardSmall from "./CardSmall";
 import ImageCircle from "./ImageCircle";
 import ScoreBox from "./ScoreBox";
+import Error from "./Error";
+import RoundTitleBox from "./RoundTitleBox";
 
 export {
   Button,
@@ -56,4 +58,6 @@ export {
   CardSmall,
   ImageCircle,
   ScoreBox,
+  Error,
+  RoundTitleBox,
 };

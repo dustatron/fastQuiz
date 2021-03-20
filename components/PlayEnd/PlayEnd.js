@@ -1,12 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 import PlayerCard from "../PlayerCard";
-import { Card, Button, Header, RowSide, Title, SpacerBar } from "../Styled";
+import {
+  Card,
+  Button,
+  Header,
+  RowSide,
+  Title,
+  SpacerBar,
+  RowSpacedOut,
+} from "../Styled";
 
-const PlayEnd = ({ players }) => {
+const PlayEnd = ({ players, totalPoints }) => {
   return (
     <Card lite>
-      <Header>Game Over</Header>
+      <RowSpacedOut>
+        <Header>Game Over</Header>
+        <Title>Max Possible Points: {totalPoints}</Title>
+      </RowSpacedOut>
       <SpacerBar />
       <RowSide>
         {players &&
