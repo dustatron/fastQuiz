@@ -9,8 +9,14 @@ const ButtonAdd = styled.button`
   padding: 10px 13px;
   border-radius: 100%;
   border: none;
-  margin: 10px auto;
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    padding: 0;
+    padding: 10px 13px;
+    margin: 5px;
+    font-size: unset;
+  }
 `;
 
 export default ButtonAdd;

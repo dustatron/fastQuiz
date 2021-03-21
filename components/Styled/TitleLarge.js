@@ -7,6 +7,11 @@ const TitleLarge = styled(Title)`
   padding-top: ${(props) => (props.padTop ? props.padTop : "unset")};
   padding-bottom: ${(props) => (props.padBottom ? props.padBottom : "unset")};
   color: ${(props) => (props.dark ? colors.black : colors.white)};
+
+  @media screen and (max-width: 768px) {
+    font-size: 40px;
+    width: 100%;
+  }
 `;
 
 export default TitleLarge;

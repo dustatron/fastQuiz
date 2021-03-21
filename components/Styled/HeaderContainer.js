@@ -8,6 +8,13 @@ const HeaderContainer = styled.div`
   grid-template-areas:
     "top top "
     "left right";
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
 `;
 
 export default HeaderContainer;

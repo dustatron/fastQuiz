@@ -4,16 +4,16 @@ import RowCenter from "./RowCenter";
 const RowSide = styled(RowCenter)`
   justify-content: ${(props) => (props.end ? "flex-end" : "flex-start")};
   width: auto;
-`;
 
-function getSpacing(props) {
-  switch (props) {
-    case props.spacedOut:
-      return "space-between";
+  @media screen and (max-width: 768px) {
+    width: 95%;
+    padding: 0;
 
-    default:
-      return "center";
+    ${(props) =>
+      props.sm
+        ? `justify-content: ${props.sm}`
+        : `justify-content: space-between;`}
   }
-}
+`;
 
 export default RowSide;

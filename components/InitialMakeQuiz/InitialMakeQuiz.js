@@ -68,9 +68,9 @@ const InitialMakeQuiz = () => {
           />
           <Button white>Make</Button>
         </Card>
-        <CenterItem>
+        {/* <CenterItem>
           <Button type="submit">Join Game</Button>
-        </CenterItem>
+        </CenterItem> */}
       </form>
     </Section>
   );

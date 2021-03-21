@@ -13,6 +13,14 @@ const Tab = styled.div`
   margin: 2px 0;
   border: 1px solid ${colors.black};
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    border-radius: 6px 6px 0 0;
+    margin: 0px 2px;
+    font-size: 11px;
+    padding: 5px;
+    height: 40px;
+  }
 `;
 
 export default Tab;

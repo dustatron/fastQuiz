@@ -15,6 +15,12 @@ const Card = styled.div`
     css`
       min-height: ${props.height};
     `}
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 1rem 1rem;
+    /* margin: 1rem 0; */
+  }
 `;
 
 export default Card;

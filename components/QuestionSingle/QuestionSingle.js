@@ -53,6 +53,7 @@ const QuestionSingle = ({
                   white
                   margin={"10px"}
                   width={"80%"}
+                  mdWidth={"90%"}
                   pad={"1.3em 2em"}
                   key={`${q[0]}-${index}`}
                   active={isShowingAnswer && correct_answer === q}

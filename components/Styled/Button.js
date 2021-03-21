@@ -28,6 +28,10 @@ const Button = styled.button`
       font-weight: 900;
       background: lightblue;
     `}
+
+    @media screen and (max-width: 768px) {
+    ${(props) => props.mdWidth && `width: ${props.mdWidth}`}
+  }
 `;
 
 export default Button;

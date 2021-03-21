@@ -8,6 +8,11 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+
+  @media screen and (max-width: 768px) {
+    width: 95%;
+    padding: 0;
+  }
 `;
 
 export default Container;

@@ -125,7 +125,7 @@ const QuestionsGenerate = ({ handleGenerate }) => {
           </Select>
         </FormGroup>
       </RowSpacedOut>
-      <RowSide end>
+      <RowSide end sm={"center"}>
         <Button white>Generate</Button>
       </RowSide>
     </form>

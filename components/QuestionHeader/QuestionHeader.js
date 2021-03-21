@@ -87,7 +87,7 @@ const QuestionHeader = ({
     <Section pad={"1rem"} height={"unset"}>
       <HeaderContainer>
         <Top className="top">
-          <RowSpacedOut center padTop={"2rem"}>
+          <RowSpacedOut center padTop={"2rem"} md={"center"}>
             <TitleLarge dark>{quizName}</TitleLarge>
             <Button
               onClick={() => {
@@ -103,7 +103,12 @@ const QuestionHeader = ({
         </Top>
 
         <Left className="left">
-          <ButtonShy onClick={removeRound} size={"1.6rem"} margin={"10px auto"}>
+          <ButtonShy
+            onClick={removeRound}
+            size={"1.6rem"}
+            margin={"10px auto"}
+            marginIpad={"5px"}
+          >
             🗑
           </ButtonShy>
           {rounds &&

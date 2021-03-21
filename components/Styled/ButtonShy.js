@@ -19,6 +19,11 @@ const ButtonShy = styled.button`
     css`
       color: ${colors.white};
     `}
+
+    @media screen and (max-width: 768px) {
+    padding: 0;
+    ${(props) => props.marginIpad && `margin: ${props.marginIpad} `}
+  }
 `;
 
 export default ButtonShy;

@@ -38,14 +38,14 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
 
   return (
     <Card lite>
-      <RowSpacedOut top>
+      <RowSpacedOut top sm={"space-between"}>
         <Title justify="left" left>
           {quizName}
         </Title>
         <ButtonShy onClick={handleDelete}>🗑</ButtonShy>
       </RowSpacedOut>
       <RowSpacedOut bottom>
-        <RowSide>
+        <RowSide sm={"flex-start"}>
           <Detail marginR={"5px"} borderR>
             Questions: {getQuestionsAmount()}
           </Detail>

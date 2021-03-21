@@ -5,6 +5,12 @@ const Section = styled.div`
   padding: ${(props) => (props.pad ? props.pad : "4rem")};
   width: 70%;
   min-height: ${(props) => (props.height ? props.height : "50vh")};
+
+  // Ipad
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 2rem 0;
+  }
 `;
 
 export default Section;

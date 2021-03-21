@@ -10,6 +10,11 @@ const Detail = styled.div`
   font-weight: ${(props) => (props.lite ? "lighter" : "bold")};
   padding-top: ${(props) => (props.padTop ? props.padTop : "unset")};
   padding-bottom: ${(props) => (props.padBottom ? props.padBottom : "unset")};
+
+  @media screen and (max-width: 768px) {
+    font-size: 11px;
+    padding-left: 5px;
+  }
 `;
 
 export default Detail;
