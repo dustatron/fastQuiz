@@ -3,6 +3,8 @@ import { SpacerBar } from "../components/Styled";
 import QuestionHeader from "../components/QuestionHeader";
 import QuestionSingle from "../components/QuestionSingle";
 import withAuth from "../components/WithPrivateRoute";
+import Head from "next/head";
+import InitialMakeQuiz from "../components/InitialMakeQuiz";
 
 const fakeData = {
   gameTitle: "Friday Night Quiz",
@@ -21,13 +23,12 @@ const fakeQuestion = {
 const make = () => {
   return (
     <>
-      <QuestionHeader title={fakeData.gameTitle} />
-      <SpacerBar width={"75%"} />
-      <QuestionSingle
-        q={fakeQuestion.q}
-        number={fakeQuestion.number}
-        handelDelete={fakeQuestion.handelDelete}
-      />
+      <Head>
+        <title>FastQuiz</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <InitialMakeQuiz />
     </>
   );
 };

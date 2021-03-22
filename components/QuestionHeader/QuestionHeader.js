@@ -121,8 +121,7 @@ const QuestionHeader = ({
                   }}
                   active={index === selectedRound}
                 >
-                  {" "}
-                  Round {round.round}{" "}
+                  Round {round.round}
                 </Tab>
               );
             })}
@@ -136,6 +135,7 @@ const QuestionHeader = ({
                 {isEditing ? (
                   <Input
                     value={roundTitle}
+                    onBlur={editRoundTitle}
                     onChange={(e) => {
                       setRoundTitle(e.target.value);
                     }}

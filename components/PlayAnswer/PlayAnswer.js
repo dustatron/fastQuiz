@@ -1,17 +1,12 @@
 import React from "react";
 import { clean } from "../../helpers";
-import {
-  Card,
-  Button,
-  Header,
-  RowCenter,
-  Title,
-  SpacerBar,
-  RowSide,
-} from "../Styled";
+import { Card, Header, RowCenter, Title, SpacerBar } from "../Styled";
+import PlayerCard from "../PlayerCard";
 
 const PlayAnswer = ({
-  answerData: { round, answer, question, questionsLeftInRound },
+  currentSlide,
+  players,
+  answerData: { round, answer, questionsLeftInRound, question },
 }) => {
   return (
     <>
@@ -25,6 +20,22 @@ const PlayAnswer = ({
           <Header>{clean(answer)}</Header>
         </RowCenter>
       </Card>
+      <RowCenter>
+        {players &&
+          players.map((player) => (
+            <PlayerCard
+              // name={player.name}
+              photo={player.photo}
+              correct={
+                answer ===
+                player.userAnswer[player.theQuestion.indexOf(question)]
+                  ? 2
+                  : 1
+              }
+              answer={player.userAnswer[player.theQuestion.indexOf(question)]}
+            />
+          ))}
+      </RowCenter>
     </>
   );
 };

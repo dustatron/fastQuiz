@@ -22,7 +22,7 @@ const NavBar = ({ user, signOut, signIn }) => {
           </Link>
         </Logo>
         <Menu>
-          {/* <Item>
+          <Item>
             <Link href="/make">
               <ButtonShy
                 white
@@ -32,7 +32,7 @@ const NavBar = ({ user, signOut, signIn }) => {
                 Make
               </ButtonShy>
             </Link>
-          </Item> */}
+          </Item>
           <Item>
             <Link href="/games">
               <ButtonShy

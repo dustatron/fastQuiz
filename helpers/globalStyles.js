@@ -18,7 +18,11 @@ const GlobalStyle = createGlobalStyle`
   a:link, a:visited, a:hover, a:active {
     color: ${colors.white};
     text-decoration: none;
-  } 
+  }
+  
+  h3 {
+    margin: 5px 0;
+  }
 `;
 
 export default GlobalStyle;

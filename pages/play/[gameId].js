@@ -8,6 +8,7 @@ import PlayQuestion from "../../components/PlayQuestion";
 import PlayAnswer from "../../components/PlayAnswer";
 import PlayEnd from "../../components/PlayEnd";
 import PlayWaitingRoom from "../../components/PlayWaitingRoom";
+import AdminBar from "../../components/AdminBar";
 
 const play = ({ router }) => {
   const { gameId } = router.query;
@@ -27,8 +28,13 @@ const play = ({ router }) => {
 
   /* get snapshot of current game */
   /* get window location and set it to state */
+  /* add User to game and set users data to local state.  */
   useEffect(() => {
     setHostname(window.location.hostname);
+
+    // if (gameData) {
+    //   addNewUser(gameData);
+    // }
 
     if (!gameData) {
       gameRef.onSnapshot((doc) => {
@@ -36,14 +42,8 @@ const play = ({ router }) => {
         setGameData(data);
       });
     }
-  }, [gameData]);
 
-  /* add User to game and set users data to local state.  */
-  useEffect(() => {
-    // if (gameData) {
-    //   addNewUser(gameData);
-    // }
-    const unSubscribe = playersRef.onSnapshot((snapShot) => {
+    playersRef.onSnapshot((snapShot) => {
       const playerList = [];
       snapShot.forEach((doc) => playerList.push({ ...doc.data(), id: doc.id }));
       setPlayers(playerList);
@@ -61,9 +61,6 @@ const play = ({ router }) => {
       .catch((error) => {
         console.log("Error getting documents: ", error);
       });
-
-    // playersRef.where('Id', '==', user.uid)
-    // return unSubscribe;
   }, [gameData]);
 
   useEffect(() => {
@@ -75,10 +72,13 @@ const play = ({ router }) => {
   const playerHastakenTurn = async () => {
     const currentQuestion =
       gameData.gamePlayable[gameData.gameCurrentSlide].question;
+
     const isAnswer =
       gameData.gamePlayable[gameData.gameCurrentSlide].type === "answer";
+    const isRound =
+      gameData.gamePlayable[gameData.gameCurrentSlide].type === "round";
 
-    if (isAnswer) {
+    if (isAnswer || isRound) {
       console.log("answer");
       await setUsersHavePlayed([]);
       return setReadyToAdvance(true);
@@ -99,7 +99,7 @@ const play = ({ router }) => {
       return false;
     }, true);
 
-    if (allUsersHavePlayed && usersHavePlayed.length > 1) {
+    if (allUsersHavePlayed && usersHavePlayed.length >= 1) {
       return setReadyToAdvance(true);
     }
     return setReadyToAdvance(false);
@@ -169,13 +169,27 @@ const play = ({ router }) => {
   };
 
   const advanceSlide = () => {
-    const netSlide = gameData.gameCurrentSlide + 1;
-    if (netSlide >= gameData.gamePlayable.length) {
+    const nextSlide = gameData.gameCurrentSlide + 1;
+    if (nextSlide >= gameData.gamePlayable.length) {
       return gameRef.set({ ...gameData, gameEnd: true });
     }
-    return gameRef.set({ ...gameData, gameCurrentSlide: netSlide }).then(() => {
-      console.log("next slide");
-    });
+    return gameRef
+      .set({ ...gameData, gameCurrentSlide: nextSlide })
+      .then(() => {
+        console.log("next slide");
+      });
+  };
+
+  const backSlide = async () => {
+    const backSlide = gameData.gameCurrentSlide - 1;
+    console.log(backSlide);
+    if (backSlide > 0) {
+      return await gameRef
+        .set({ ...gameData, gameCurrentSlide: backSlide })
+        .then(() => {
+          console.log("Back slide");
+        });
+    }
   };
 
   const restartGame = () => {
@@ -211,6 +225,19 @@ const play = ({ router }) => {
 
   return (
     <>
+      {user.uid === gameData?.authId && (
+        <AdminBar
+          nextSlide={advanceSlide}
+          backSlide={backSlide}
+          restart={restartGame}
+          ready={readyToAdvance}
+          startGame={startGame}
+          isStarted={gameData?.gameStarted}
+          isEnd={gameData?.gameEnd}
+          players={players}
+        />
+      )}
+
       {!gameData?.gameStarted && (
         <PlayWaitingRoom
           gameData={gameData}
@@ -218,8 +245,8 @@ const play = ({ router }) => {
           hostname={hostname}
           gameId={gameId}
           players={players}
-          startGame={startGame}
           addNewUser={addNewUser}
+          user={user}
         />
       )}
 
@@ -267,6 +294,8 @@ const play = ({ router }) => {
               <div>
                 <PlayAnswer
                   answerData={gameData.gamePlayable[gameData.gameCurrentSlide]}
+                  players={players}
+                  currentSlide={gameData.gameCurrentSlide}
                 />
               </div>
             )}
@@ -275,23 +304,6 @@ const play = ({ router }) => {
               <PlayEnd players={players} totalPoints={gameData.totalPoints} />
             </div>
           )}
-
-          {/* BUTTONS  */}
-          <RowSpacedOut>
-            <div>
-              {readyToAdvance && playerData?.Id === gameData.authId && (
-                <Button>ready</Button>
-              )}
-            </div>
-            <div>
-              {gameData?.gameEnd && playerData?.Id === gameData.authId && (
-                <Button onClick={restartGame}> Restart </Button>
-              )}
-              {!gameData.gameEnd && playerData?.Id === gameData.authId && (
-                <Button onClick={advanceSlide}>Next</Button>
-              )}
-            </div>
-          </RowSpacedOut>
         </Section>
       )}
     </>

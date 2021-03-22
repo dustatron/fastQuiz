@@ -17,6 +17,13 @@ const Button = styled.button`
     transition: all 0.1s ease;
   }
 
+  &:disabled {
+    background: ${colors.gray};
+    color: ${colors.black};
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
   ${(props) =>
     props.width &&
     css`
@@ -26,7 +33,8 @@ const Button = styled.button`
     props.active &&
     css`
       font-weight: 900;
-      background: lightblue;
+      background: linear-gradient(90.81deg, #f56565 0%, #ed64a6 100%);
+      filter: drop-shadow(2.5px 2.5px 0px #cc3e82);
     `}
 
     @media screen and (max-width: 768px) {

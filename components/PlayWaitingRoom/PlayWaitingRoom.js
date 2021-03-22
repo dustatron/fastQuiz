@@ -1,5 +1,5 @@
 import React from "react";
-import { isEmpty } from "lodash";
+import { find, isEmpty } from "lodash";
 import PlayerCard from "../PlayerCard";
 import {
   Section,
@@ -15,12 +15,11 @@ import PlayAnswer from "../PlayAnswer";
 
 const PlayWaitingRoom = ({
   gameData,
-  user,
   hostname,
   gameId,
   players,
-  startGame,
   addNewUser,
+  user,
 }) => {
   return (
     <Section>
@@ -50,22 +49,19 @@ const PlayWaitingRoom = ({
         </RowSide>
       </Card>
 
-      <RowSpacedOut>
-        <div>
-          {gameData && user.uid === gameData.authId && (
-            <Button onClick={startGame}> Start </Button>
-          )}
-        </div>
-        <div>
-          <Button
-            onClick={() => {
-              addNewUser(gameData);
-            }}
-          >
-            Join
-          </Button>
-        </div>
-      </RowSpacedOut>
+      <RowSide end>
+        {players && !find(players, ["Id", user.uid]) && (
+          <div>
+            <Button
+              onClick={() => {
+                addNewUser(gameData);
+              }}
+            >
+              Join
+            </Button>
+          </div>
+        )}
+      </RowSide>
     </Section>
   );
 };
