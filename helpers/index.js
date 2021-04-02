@@ -6,6 +6,15 @@ import {
   useMedia,
 } from "./firbaseHooks";
 import { fetchQuizApi } from "./fetchApi";
+import {
+  addNewUser,
+  playerHasTakenTurn,
+  startGame,
+  addUserGuess,
+  restartGame,
+} from "./gamePlayUtils";
+
+import { advanceSlide, backSlide } from "./slideControls";
 
 const clean = (string) => {
   return string
@@ -26,4 +35,11 @@ export {
   useLocalStorage,
   useMedia,
   fetchQuizApi,
+  addNewUser,
+  playerHasTakenTurn,
+  startGame,
+  addUserGuess,
+  restartGame,
+  advanceSlide,
+  backSlide,
 };

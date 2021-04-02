@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   RowSpacedOut,
+  RowSide,
   Button,
   Header,
   Card,
@@ -14,7 +15,7 @@ import {
   Left,
   Right,
   HeaderContainer,
-  TitleLarge,
+  Title,
   Input,
   RoundTitleBox,
 } from "../Styled";
@@ -87,8 +88,7 @@ const QuestionHeader = ({
     <Section pad={"1rem"} height={"unset"}>
       <HeaderContainer>
         <Top className="top">
-          <RowSpacedOut center padTop={"2rem"} md={"center"}>
-            <TitleLarge dark>{quizName}</TitleLarge>
+          <RowSide end padTop={"2rem"} md={"center"}>
             <Button
               onClick={() => {
                 router.push(`/play/${quizData.id}`);
@@ -96,10 +96,7 @@ const QuestionHeader = ({
             >
               Play
             </Button>
-          </RowSpacedOut>
-          <RowCenter>
-            <Header> Add Question </Header>
-          </RowCenter>
+          </RowSide>
         </Top>
 
         <Left className="left">
@@ -128,6 +125,9 @@ const QuestionHeader = ({
           <ButtonAdd onClick={addRound}>+</ButtonAdd>
         </Left>
         <Right className="right">
+          <RowCenter>
+            <Title dark> {quizName} Quiz </Title>
+          </RowCenter>
           <Card>
             <RowSpacedOut top>
               <RoundTitleBox>
@@ -145,17 +145,17 @@ const QuestionHeader = ({
                 )}
               </RoundTitleBox>
               <div>
-                <ButtonShy
+                <Button
                   white
                   active={showing === 0 && true}
                   onClick={() => {
                     setShowing(0);
                   }}
                 >
-                  Generate
-                </ButtonShy>
+                  Auto Questions
+                </Button>
                 |
-                <ButtonShy
+                <Button
                   white
                   active={showing === 1 && true}
                   onClick={() => {
@@ -163,7 +163,7 @@ const QuestionHeader = ({
                   }}
                 >
                   Custom Question
-                </ButtonShy>
+                </Button>
               </div>
             </RowSpacedOut>
             {showing === 0 && (

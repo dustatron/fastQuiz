@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { find, isEmpty } from "lodash";
 import PlayerCard from "../PlayerCard";
 import {
@@ -20,7 +20,15 @@ const PlayWaitingRoom = ({
   players,
   addNewUser,
   user,
+  gameRef,
 }) => {
+  useEffect(() => {
+    /* auto add admin to game */
+    if (gameData && user.uid === gameData.authId) {
+      addNewUser(gameRef, user);
+    }
+  }, [gameData]);
+
   return (
     <Section>
       <Card>
@@ -54,7 +62,7 @@ const PlayWaitingRoom = ({
           <div>
             <Button
               onClick={() => {
-                addNewUser(gameData);
+                addNewUser(gameRef, user);
               }}
             >
               Join

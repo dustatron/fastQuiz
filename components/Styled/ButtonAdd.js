@@ -10,6 +10,7 @@ const ButtonAdd = styled.button`
   border-radius: 100%;
   border: none;
   cursor: pointer;
+  margin: 10px auto;
 
   @media screen and (max-width: 768px) {
     padding: 0;

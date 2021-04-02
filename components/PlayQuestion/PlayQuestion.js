@@ -8,6 +8,10 @@ const PlayQuestion = ({
   question: { incorrect_answers, correct_answer, question },
   addUserGuess,
   usersHavePlayed,
+  playerData,
+  setPlayerData,
+  playersRef,
+  gameData,
 }) => {
   const [shuffledQuestions, setDisplay] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -22,12 +26,21 @@ const PlayQuestion = ({
     userGuess,
     correctAnswer,
     question,
-    updateScoreCallback
+    addUserGuess
   ) => {
-    if (!selected) {
-      setSelected(userGuess);
-      updateScoreCallback(userGuess, correctAnswer, question);
-    }
+    // if (!selected) {
+    setSelected(userGuess);
+    const params = {
+      gameData,
+      userGuess,
+      correctAnswer,
+      question,
+      playerData,
+      setPlayerData,
+      playersRef,
+    };
+    addUserGuess(params);
+    // }
   };
 
   return (
@@ -38,6 +51,7 @@ const PlayQuestion = ({
         <RowCenter>
           {shuffledQuestions.map((q, index) => (
             <Button
+              key={`${q}-${index}`}
               white
               margin={"10px"}
               width={"80%"}
@@ -55,14 +69,12 @@ const PlayQuestion = ({
       </Card>
       <RowCenter>
         {usersHavePlayed &&
-          usersHavePlayed.map((user) => (
-            <>
+          usersHavePlayed.map((user, index) => (
+            <div key={`${user.name}-${index}`}>
               {user.hasPlayed && (
-                <div>
-                  <PlayerCard name={user.name} photo={user.photo} />
-                </div>
+                <PlayerCard name={user.name} photo={user.photo} />
               )}
-            </>
+            </div>
           ))}
       </RowCenter>
     </>

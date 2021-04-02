@@ -27,12 +27,21 @@ const QuestionSingle = ({
     setDisplay(shuffle(options));
   }, [correct_answer, incorrect_answers]);
 
+  const handleDeleteQuestion = () => {
+    let result = confirm(
+      "Are you sure you would like to delete this question?"
+    );
+    if (result) {
+      handelDelete(qIndex);
+    }
+  };
+
   return (
     <Section height={"1rem"} pad={"1rem 2rem"}>
       <HeaderContainer>
         <Left>
-          <Tab onClick={() => handelDelete(qIndex)}>Delete </Tab>
-          <Tab> Edit </Tab>
+          <Tab onClick={handleDeleteQuestion}>Delete </Tab>
+          {/* <Tab> Edit </Tab> */}
           <Tab
             active={isShowingAnswer}
             onClick={() => {

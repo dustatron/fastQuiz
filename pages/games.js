@@ -25,9 +25,7 @@ const games = () => {
     <Section>
       <h1>Games</h1>
       {gameList.map((game) => (
-        <>
-          <GameCard game={game} />
-        </>
+        <GameCard game={game} key={game.id} />
       ))}
     </Section>
   );

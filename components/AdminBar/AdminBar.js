@@ -1,28 +1,45 @@
 import React from "react";
 import { Section, Button, Card, Title, RowCenter } from "../Styled";
+import { isEmpty } from "lodash";
+import { advanceSlide, backSlide, restartGame } from "../../helpers";
 import LeftArrow from "./left-arrow.svg";
 import RightArrow from "./right-arrow.svg";
 import UpdateArrow from "./update-arrow.svg";
 import PlayButton from "./play-button.svg";
-import { isEmpty } from "lodash";
 
 const AdminBar = ({
-  nextSlide,
-  backSlide,
-  restart,
   ready,
   startGame,
   isStarted,
   isEnd,
   players,
+  gameData,
+  gameRef,
+  playersRef,
 }) => {
+  const handleBackSlide = () => {
+    backSlide(gameData, gameRef);
+  };
+
+  const handleNextSlide = () => {
+    advanceSlide(gameData, gameRef);
+  };
+
+  const handleStartGame = () => {
+    startGame(gameData, gameRef);
+  };
+
+  const handleRestartGame = () => {
+    restartGame(gameData, gameRef, playersRef);
+  };
+
   return (
     <Section pad={"0"} height={"1rem"}>
       <Card lite>
         <Title>Admin Panel</Title>
         <RowCenter padTop={"20px"}>
           <Button
-            onClick={backSlide}
+            onClick={handleBackSlide}
             active={isStarted && !isEnd}
             margin={"0 10px"}
             disabled={isEnd || !isStarted}
@@ -36,7 +53,7 @@ const AdminBar = ({
             back
           </Button>
           <Button
-            onClick={restart}
+            onClick={handleRestartGame}
             active={isEnd}
             margin={"0 10px"}
             disabled={isEmpty(players)}
@@ -50,7 +67,7 @@ const AdminBar = ({
             />
           </Button>
           <Button
-            onClick={startGame}
+            onClick={handleStartGame}
             active={!isStarted && !isEmpty(players)}
             margin={"0 10px"}
             disabled={isEnd || isEmpty(players)}
@@ -64,7 +81,7 @@ const AdminBar = ({
             />
           </Button>
           <Button
-            onClick={nextSlide}
+            onClick={handleNextSlide}
             active={ready && !isEmpty(players) && isStarted}
             disabled={isEnd || !isStarted}
             margin={"0 10px"}
