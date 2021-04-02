@@ -3,6 +3,7 @@ import firebase from "firebase";
 import GameCard from "../components/GameCard";
 import { Section } from "../components/Styled";
 import withAuth from "../components/WithPrivateRoute";
+import NoGames from "../components/NoGames";
 
 const games = () => {
   const [gameList, setGameList] = useState([]);
@@ -27,6 +28,7 @@ const games = () => {
       {gameList.map((game) => (
         <GameCard game={game} key={game.id} />
       ))}
+      {gameList.length <= 0 && <NoGames />}
     </Section>
   );
 };
