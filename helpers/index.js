@@ -19,6 +19,8 @@ import { advanceSlide, backSlide } from "./slideControls";
 const clean = (string) => {
   return string
     .replace(/&quot;/g, '"')
+    .replace(/&ldquo;/g, '"')
+    .replace(/&rdquo;/g, '"')
     .replace(/&#039;/g, "'")
     .replace(/&rsquo;/g, "'")
     .replace(/&amp;/g, "&")
