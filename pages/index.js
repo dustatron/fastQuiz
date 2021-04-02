@@ -1,15 +1,21 @@
 import Head from "next/head";
-import InitialMakeQuiz from "../components/InitialMakeQuiz";
+import {
+  RowCenter,
+  TitleLarge,
+  Section,
+  SpacerBar,
+} from "../components/Styled";
 
 export default function Home() {
   return (
-    <>
-      <Head>
-        <title>FastQuiz</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Section>
+      <TitleLarge dark>
+        Welcome to Fast<strong>Quiz</strong>
+      </TitleLarge>
+      <SpacerBar />
+      <RowCenter>Make and share quiz games within minutes.</RowCenter>
 
-      <InitialMakeQuiz />
-    </>
+      {/* <InitialMakeQuiz /> */}
+    </Section>
   );
 }
