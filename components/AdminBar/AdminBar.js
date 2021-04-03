@@ -1,6 +1,7 @@
-import React from "react";
-import { Section, Button, Card, Title, RowCenter } from "../Styled";
+import React, { useState, useEffect } from "react";
+import { Section, Button, Card, Title, RowCenter, RowSide } from "../Styled";
 import { isEmpty } from "lodash";
+import Switch from "react-switch";
 import { advanceSlide, backSlide, restartGame } from "../../helpers";
 import LeftArrow from "./left-arrow.svg";
 import RightArrow from "./right-arrow.svg";
@@ -16,7 +17,17 @@ const AdminBar = ({
   gameData,
   gameRef,
   playersRef,
+  isPublic,
+  toggleIsPublic,
 }) => {
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (isPublic) {
+      setChecked(true);
+    }
+  }, []);
+
   const handleBackSlide = () => {
     backSlide(gameData, gameRef);
   };
@@ -33,10 +44,23 @@ const AdminBar = ({
     restartGame(gameData, gameRef, playersRef);
   };
 
+  const handleChange = (nextChecked) => {
+    setChecked(nextChecked);
+    toggleIsPublic(nextChecked, gameData);
+  };
+
   return (
     <Section pad={"0"} height={"1rem"}>
       <Card lite>
         <Title>Admin Panel</Title>
+        <RowSide>
+          <div>
+            <div>
+              <strong>Public</strong>
+            </div>
+            <Switch onChange={handleChange} checked={checked} />
+          </div>
+        </RowSide>
         <RowCenter padTop={"20px"}>
           <Button
             onClick={handleBackSlide}

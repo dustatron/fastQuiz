@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import firebase from "firebase";
+import Switch from "react-switch";
 import {
   Card,
   Title,
@@ -9,11 +10,26 @@ import {
   RowSpacedOut,
   RowSide,
   Detail,
+  Header,
 } from "../Styled";
 
-const GameCard = ({ game: { quizName, rounds, createdAt, id }, isAuthor }) => {
+const GameCard = ({ game, isAuthor, toggleIsPublic }) => {
+  const { quizName, rounds, createdAt, id, isPublic, authName } = game;
   const router = useRouter();
   const quizDBRef = firebase.firestore().collection("quizDB");
+
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (isPublic) {
+      setChecked(true);
+    }
+  }, []);
+
+  const handleChange = (nextChecked) => {
+    setChecked(nextChecked);
+    toggleIsPublic(nextChecked, game);
+  };
 
   const getQuestionsAmount = () => {
     return rounds.reduce((total, current) => {
@@ -43,8 +59,19 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id }, isAuthor }) => {
           {quizName}
         </Title>
         {isAuthor && <ButtonShy onClick={handleDelete}>🗑</ButtonShy>}
+        {!isAuthor && <strong> Created by: {authName.split(" ")[0]}</strong>}
       </RowSpacedOut>
-      <RowSide end></RowSide>
+      {isAuthor && (
+        <RowSide>
+          <div>
+            <div>
+              <strong>Public</strong>
+            </div>
+            <Switch onChange={handleChange} checked={checked} />
+          </div>
+        </RowSide>
+      )}
+
       <RowSpacedOut bottom>
         <RowSide sm={"flex-start"}>
           <Detail marginR={"5px"} borderR>

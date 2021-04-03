@@ -22,11 +22,22 @@ const games = () => {
       });
   }, []);
 
+  const toggleIsPublic = (toggledValue, gameObj) => {
+    const updateIsPublic = { ...gameObj, isPublic: toggledValue };
+    const quizRef = firebase.firestore().collection("quizDB").doc(gameObj.id);
+    quizRef.set(updateIsPublic);
+  };
+
   return (
     <Section>
       <h1>Games</h1>
       {gameList.map((game) => (
-        <GameCard game={game} key={game.id} isAuthor />
+        <GameCard
+          game={game}
+          key={game.id}
+          isAuthor
+          toggleIsPublic={toggleIsPublic}
+        />
       ))}
       {gameList.length <= 0 && <NoGames />}
     </Section>

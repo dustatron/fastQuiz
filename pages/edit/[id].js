@@ -8,19 +8,19 @@ import QuestionSingle from "../../components/QuestionSingle";
 import withAuth from "../../components/WithPrivateRoute";
 import { SpacerBar, Spinner, RowCenter, Title } from "../../components/Styled";
 
-const fakeData = {
-  gameTitle: "Friday Night Quiz",
-};
+// const fakeData = {
+//   gameTitle: "Friday Night Quiz",
+// };
 
-const fakeQuestion = {
-  number: 1,
-  handelDelete: () => {},
-  q: {
-    question: "How many are there?",
-    correct_answer: "1",
-    incorrect_answers: ["2", "3", "4"],
-  },
-};
+// const fakeQuestion = {
+//   number: 1,
+//   handelDelete: () => {},
+//   q: {
+//     question: "How many are there?",
+//     correct_answer: "1",
+//     incorrect_answers: ["2", "3", "4"],
+//   },
+// };
 
 const Edit = () => {
   const [quizData, setQuizData] = useState(null);

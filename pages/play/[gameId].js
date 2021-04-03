@@ -82,6 +82,12 @@ const play = ({ router }) => {
     }
   }, [players]);
 
+  const toggleIsPublic = (toggledValue, gameObj) => {
+    const updateIsPublic = { ...gameObj, isPublic: toggledValue };
+    const quizRef = firebase.firestore().collection("quizDB").doc(gameObj.id);
+    quizRef.set(updateIsPublic);
+  };
+
   return (
     <>
       {user.uid === gameData?.authId && (
@@ -94,6 +100,8 @@ const play = ({ router }) => {
           gameData={gameData}
           gameRef={gameRef}
           playersRef={playersRef}
+          isPublic={gameData.isPublic}
+          toggleIsPublic={toggleIsPublic}
         />
       )}
 

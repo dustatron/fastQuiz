@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { isEmpty, isArrayLike } from "lodash";
+import { isElement, isArrayLike } from "lodash";
 
 export const addNewUser = async (gameRef, user) => {
   const doesNotHaveUser = await gameRef
@@ -131,8 +131,10 @@ export const playerHasTakenTurn = async ({
 };
 
 function isCurrentSlideAQuestion(gameData) {
-  const { type } = gameData.gamePlayable[gameData.gameCurrentSlide];
-  return type === "question" ? true : false;
+  if (isElement(gameData)) {
+    const { type } = gameData.gamePlayable[gameData.gameCurrentSlide];
+    return type === "question" ? true : false;
+  }
 }
 
 function getCurrentQuestion(gameData) {
