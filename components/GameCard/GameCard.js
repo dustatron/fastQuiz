@@ -11,7 +11,7 @@ import {
   Detail,
 } from "../Styled";
 
-const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
+const GameCard = ({ game: { quizName, rounds, createdAt, id }, isAuthor }) => {
   const router = useRouter();
   const quizDBRef = firebase.firestore().collection("quizDB");
 
@@ -42,8 +42,9 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
         <Title justify="left" left>
           {quizName}
         </Title>
-        <ButtonShy onClick={handleDelete}>🗑</ButtonShy>
+        {isAuthor && <ButtonShy onClick={handleDelete}>🗑</ButtonShy>}
       </RowSpacedOut>
+      <RowSide end></RowSide>
       <RowSpacedOut bottom>
         <RowSide sm={"flex-start"}>
           <Detail marginR={"5px"} borderR>
@@ -58,14 +59,16 @@ const GameCard = ({ game: { quizName, rounds, createdAt, id } }) => {
           </Detail>
         </RowSide>
         <RowSide end>
-          <Button
-            margin={"5px"}
-            onClick={() => {
-              router.push(`/edit/${id}`);
-            }}
-          >
-            Edit
-          </Button>
+          {isAuthor && (
+            <Button
+              margin={"5px"}
+              onClick={() => {
+                router.push(`/edit/${id}`);
+              }}
+            >
+              Edit
+            </Button>
+          )}
           <Button
             onClick={() => {
               router.push(`/play/${id}`);

@@ -26,7 +26,7 @@ const games = () => {
     <Section>
       <h1>Games</h1>
       {gameList.map((game) => (
-        <GameCard game={game} key={game.id} />
+        <GameCard game={game} key={game.id} isAuthor />
       ))}
       {gameList.length <= 0 && <NoGames />}
     </Section>
