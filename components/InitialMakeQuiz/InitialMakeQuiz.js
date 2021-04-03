@@ -13,6 +13,9 @@ import {
   Error,
 } from "../Styled";
 
+const PLEASE_NAME = "Please name your quiz";
+const TO_LONG = "A quiz name can only be 50 characters long";
+
 const InitialMakeQuiz = () => {
   const [quizName, setQuizName] = useState("");
   const [error, setError] = useState(null);
@@ -22,8 +25,8 @@ const InitialMakeQuiz = () => {
 
   const quizDBRef = firebase.firestore().collection("quizDB");
 
-  const addErrorMessage = () => {
-    setError("Please name your quiz");
+  const addErrorMessage = (message) => {
+    setError(message);
     setTimeout(() => {
       setError(null);
     }, 3000);
@@ -33,11 +36,14 @@ const InitialMakeQuiz = () => {
     e.preventDefault();
 
     if (quizName.length <= 0) {
-      return addErrorMessage();
+      return addErrorMessage(PLEASE_NAME);
+    }
+    if (quizName.length > 50) {
+      return addErrorMessage(TO_LONG);
     }
 
     const { uid, photoURL, displayName } = auth.currentUser;
-    const quizId = await quizDBRef
+    await quizDBRef
       .add({
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         quizName,
@@ -68,9 +74,6 @@ const InitialMakeQuiz = () => {
           />
           <Button white>Make</Button>
         </Card>
-        {/* <CenterItem>
-          <Button type="submit">Join Game</Button>
-        </CenterItem> */}
       </form>
     </Section>
   );
