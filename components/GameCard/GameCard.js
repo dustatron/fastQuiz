@@ -39,7 +39,21 @@ const GameCard = ({ game, isAuthor, toggleIsPublic }) => {
 
   const handleDelete = () => {
     const results = confirm("You want to delete this game?");
+    const playersRef = firebase.firestore().collection(`quizDB/${id}/players`);
+
     if (results) {
+      /*
+       * Delete Players Sub-collection before deleting quiz.
+       * Firebase will leave the sub-collection in an orphaned doc
+       * if it is not deleted first.
+       */
+      playersRef.get().then((snap) => {
+        snap.forEach((doc) => {
+          doc.ref.delete();
+        });
+      });
+
+      /* Remove quiz doc from quizDB Collection */
       quizDBRef
         .doc(id)
         .delete()

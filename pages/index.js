@@ -40,8 +40,9 @@ export default function Home() {
           {!isEmpty(gameList) &&
             gameList.map((game) => <GameCard game={game} key={game.id} />)}
         </div>
-        <div>{isEmpty(gameList) && "No Public Games"}</div>
-        {/* </RowCenter> */}
+        <div>
+          {isEmpty(gameList) && <RowCenter> "No Public Games"</RowCenter>}
+        </div>
       </Card>
     </Section>
   );
