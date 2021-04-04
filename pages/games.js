@@ -15,6 +15,7 @@ const games = () => {
       .firestore()
       .collection("quizDB")
       .where("authId", "==", uid)
+      .orderBy("createdAt", "desc")
       .onSnapshot((snapShot) => {
         const gameList = [];
         snapShot.forEach((doc) => gameList.push({ ...doc.data(), id: doc.id }));

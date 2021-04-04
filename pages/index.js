@@ -18,6 +18,8 @@ export default function Home() {
       .firestore()
       .collection("quizDB")
       .where("isPublic", "==", true)
+      .orderBy("createdAt", "desc")
+      .limit(10)
       .onSnapshot((snapShot) => {
         const gameList = [];
         snapShot.forEach((doc) => gameList.push({ ...doc.data(), id: doc.id }));
