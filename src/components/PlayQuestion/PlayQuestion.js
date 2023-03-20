@@ -56,7 +56,6 @@ const PlayQuestion = ({
               margin={"10px"}
               width={"80%"}
               pad={"1.3em 2em"}
-              key={`${q[0]}-${index}`}
               active={q === selected}
               onClick={() => {
                 handleSelect(q, correct_answer, question, addUserGuess);

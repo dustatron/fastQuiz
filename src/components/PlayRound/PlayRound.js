@@ -12,6 +12,7 @@ const PlayRound = ({ round, players, title }) => {
         {players &&
           players.map((player) => (
             <PlayerCard
+              key={player.name}
               name={player.name}
               photo={player.photo}
               score={player.score}

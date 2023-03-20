@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "next/router";
 import firebase from "firebase";
 import withAuth from "../../components/WithPrivateRoute";
-import { Section } from "../../components/Styled";
+import { Section, Title } from "../../components/Styled";
 import { isEmpty } from "lodash";
 import {
   addNewUser,
@@ -114,7 +114,6 @@ const play = ({ router }) => {
           players={players}
           playersRef={playersRef}
           addNewUser={addNewUser}
-          user={user}
           gameRef={gameRef}
           setPlayers={setPlayers}
           setPlayerData={setPlayerData}
@@ -126,7 +125,7 @@ const play = ({ router }) => {
         <Section>
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
-              "round" && (
+            "round" && (
               <div>
                 <PlayRound
                   round={
@@ -135,10 +134,9 @@ const play = ({ router }) => {
                   players={players}
                   title={
                     gameData[
-                      `roundTitle${
-                        gameData.gamePlayable[gameData.gameCurrentSlide]
-                          ?.round - 1
-                      }`
+                    `roundTitle${gameData.gamePlayable[gameData.gameCurrentSlide]
+                      ?.round - 1
+                    }`
                     ]
                   }
                 />
@@ -148,8 +146,10 @@ const play = ({ router }) => {
           {/* SLIDES  */}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
-              "question" && (
+            "question" && (
               <>
+                <Title>Slide {gameData.gameCurrentSlide} of  {gameData.gamePlayable.length}</Title>
+
                 <PlayQuestion
                   question={gameData.gamePlayable[gameData.gameCurrentSlide]}
                   count={gameData.gameCurrentSlide}
@@ -165,8 +165,10 @@ const play = ({ router }) => {
             )}
           {!gameData.gameEnd &&
             gameData.gamePlayable[gameData.gameCurrentSlide]?.type ===
-              "answer" && (
+            "answer" && (
               <div>
+                <Title>Slide {gameData.gameCurrentSlide} of  {gameData.gamePlayable.length}</Title>
+
                 <PlayAnswer
                   answerData={gameData.gamePlayable[gameData.gameCurrentSlide]}
                   players={players}

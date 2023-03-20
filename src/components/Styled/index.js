@@ -28,6 +28,7 @@ import ImageCircle from "./ImageCircle";
 import ScoreBox from "./ScoreBox";
 import Error from "./Error";
 import RoundTitleBox from "./RoundTitleBox";
+import StopLight from "./StopLight"
 
 export {
   Button,
@@ -60,4 +61,5 @@ export {
   ScoreBox,
   Error,
   RoundTitleBox,
+  StopLight
 };
